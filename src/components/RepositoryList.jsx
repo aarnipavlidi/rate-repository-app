@@ -1,15 +1,21 @@
-import React from 'react';
-import { FlatList, View, Text, StyleSheet } from 'react-native';
+// This exercise has been commented by Aarni Pavlidi, if you have any questions or suggestions with the code,
+// then please contact me by sending email at me@aarnipavlidi.fi <3
 
-import RepositoryItem from './RepositoryItem';
+import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
+import { FlatList, View, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
+import RepositoryItem from './RepositoryItem'; // Tuodaan "RepositoryItem" (RepositoryItem.jsx) niminen komponentti sovelluksen käytettäväksi.
+
+// Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion eli
+// kun data renderöidään takaisin käyttäjälle, niin jokaisen arvon väliin
+// tulee 20px tyhjää tilaa.
 const styles = StyleSheet.create({
   separator: {
     height: 20,
   },
 });
 
-const repositories = [
+const repositories = [ // Alustetaan "repositories" niminen muuttuja, joka saa [...] taulukollisen erilaisia arvoja.
   {
     id: 'jaredpalmer.formik',
     fullName: 'jaredpalmer/formik',
@@ -56,6 +62,11 @@ const repositories = [
   },
 ];
 
+// Alustetaan "ItemSeparator" niminen komponentti, joka suorittaa (...) sisällä olevat
+// asiat aina, kun kyseiseen komponenttiin tehdään viittaus. Komponentti saa myös
+// käyttöönsä ({...}) sisällä olevat parametrien arvot. Nämä viittaavaat "repositories"
+// muuttujan kautta tulevan datan objektien arvoihin, jonka kautta "RepositoryItem"
+// komponentti pystyy renderöidään jokaisen "uniikin arvon" omalle "laatikolle".
 const ItemSeparator = ({ fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount }) => (
   <View style={styles.separator}>
     <Text>{fullName}</Text>
@@ -68,8 +79,15 @@ const ItemSeparator = ({ fullName, description, language, forksCount, stargazers
   </View>
 );
 
+// Alustetaan "RepositoryList" niminen komponentti, joka suorittaa {...} sisällä olevat asiat
+// aina, kun kyseiseen komponenttiin tehdään viittaus.
 const RepositoryList = () => {
 
+  // Komponentti "RepositoryList" renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
+  // "FlatList" komponentti saa käyttöönsä alla olevat propsien arvot missä "data" määrittää mitä
+  // dataa halutaan näyttää käyttäjälle, "ItemSeparatorComponent" määrittää, että missä muodossa
+  // data näytetään (tyyli yms.) ja "renderItem" renderöi jokaisen arvon "data" propsin kautta,
+  // jotka noudattavat "ItemSeparatorComponent" komponentin rakennetta.
   return (
     <FlatList
       data={repositories}
@@ -79,4 +97,5 @@ const RepositoryList = () => {
   );
 };
 
+// Viedään (export) alla oleva komponentti (RepositoryList) sovelluksen käytettäväksi, jotta esim. "App.js" tiedosto pystyy suorittamaan kyseiset funktiot.
 export default RepositoryList;
