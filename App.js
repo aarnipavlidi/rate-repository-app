@@ -5,7 +5,7 @@ import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovel
 import Main from './src/components/Main'; // Tuodaan "Main" (Main.jsx) niminen komponentti sovelluksen käytettäväksi.
 
 // Alustetaan "App" niminen komponetti, joka suorittaa {...} sisällä olevat asiat aina,
-// kun kyseiseen komponenttiin tehdään viittaus. 
+// kun kyseiseen komponenttiin tehdään viittaus.
 const App = () => {
   return <Main />;
 };

@@ -11,10 +11,8 @@ import AppBar from './AppBar'; // Tuodaan "AppBar" (AppBar.jsx) niminen komponen
 // Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion,
 // jonka kautta se saa käyttöönsä {...} sisällä olevat tyylien arvot.
 const styles = StyleSheet.create({
-  container: {
-    marginTop: Constants.statusBarHeight,
-    flexGrow: 1,
-    flexShrink: 1,
+  appBackground: {
+    backgroundColor: '#e1e4e8'
   },
 });
 
@@ -24,7 +22,7 @@ const Main = () => {
 
   // Komponentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
   return (
-    <View>
+    <View style={styles.appBackground}>
       <AppBar />
       <RepositoryList />
     </View>

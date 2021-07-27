@@ -7,6 +7,7 @@ const styling = {
   fontSizes: {
     body: 14,
     subheading: 16,
+    tag: 15
   },
   fonts: {
     main: 'System',

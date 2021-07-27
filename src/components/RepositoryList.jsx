@@ -11,7 +11,7 @@ import RepositoryItem from './RepositoryItem'; // Tuodaan "RepositoryItem" (Repo
 // tulee 20px tyhjää tilaa.
 const styles = StyleSheet.create({
   separator: {
-    height: 20,
+    height: 10,
   },
 });
 
@@ -67,7 +67,7 @@ const repositories = [ // Alustetaan "repositories" niminen muuttuja, joka saa [
 // käyttöönsä ({...}) sisällä olevat parametrien arvot. Nämä viittaavaat "repositories"
 // muuttujan kautta tulevan datan objektien arvoihin, jonka kautta "RepositoryItem"
 // komponentti pystyy renderöidään jokaisen "uniikin arvon" omalle "laatikolle".
-const ItemSeparator = ({ fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount }) => (
+const ItemSeparator = ({ fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl }) => (
   <View style={styles.separator}>
     <Text>{fullName}</Text>
     <Text>{description}</Text>
@@ -76,6 +76,7 @@ const ItemSeparator = ({ fullName, description, language, forksCount, stargazers
     <Text>{forksCount}</Text>
     <Text>{reviewCount}</Text>
     <Text>{ratingAverage}</Text>
+    <Text>{ownerAvatarUrl}</Text>
   </View>
 );
 
