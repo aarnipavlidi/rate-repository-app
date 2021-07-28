@@ -4,7 +4,7 @@
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
 import { Link } from 'react-router-native'; // Otetaan kyseiset komponentit käyttöön "react-router-native" kirjaston kautta sovelluksen käytettäväksi.
 import Constants from 'expo-constants'; // Otetaan käyttöön "Constants" komponentti => "expo-constants" kirjaston kautta sovelluksen käytettäväksi.
-import { Text, StyleSheet, View, Pressable } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { Text, StyleSheet, ScrollView, View, Pressable } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
 
@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
     paddingBottom: Constants.statusBarHeight,
     backgroundColor: styling.appBarContainer.backgroundColor,
     flexGrow: 1,
-    flexShrink: 1,
     flexDirection: 'row',
     justifyContent: 'space-evenly'
   },
@@ -31,20 +30,26 @@ const styles = StyleSheet.create({
 });
 
 // Alustetaan "AppBar" niminen komponentti, joka suorittaa {...} sisällä olevat asiat
-// aina kun kyseiseen komponenttiin tehdään viittaus.
+// aina kun kyseiseen komponenttiin tehdään viittaus. Tehtävää "Exercise 10.7: scrollable app bar"
+// varten lisätty alla olevaan koodiin "ScrollView" komponentti, tämän avulla jos lisäämme
+// myöhemmin "liikaa linkkejä", niin käyttäjällä on mahdollisuus "scrollata" sivuttain,
+// jotta näkee kaikki muut linkit. Ilman tätä linkit jäisivät näytön ulkopuolelle ja sitä
+// kautta ei olisi käyttäjällä mahdollisuutta esim. kirjautua ulos yms. 
 const AppBar = () => {
   return (
     <View style={styles.container}>
-      <Pressable onPress={() => console.log('Repositories text was clicked!')}>
-        <Link to="/">
-          <Text style={styles.containerTitle}>Repositories</Text>
-        </Link>
-      </Pressable>
-      <Pressable onPress={() => console.log('Login text was clicked!')}>
-        <Link to="login">
-          <Text style={styles.containerTitle}>Login</Text>
-        </Link>
-      </Pressable>
+      <ScrollView horizontal>
+        <Pressable onPress={() => console.log('Repositories text was clicked!')}>
+          <Link to="/">
+            <Text style={styles.containerTitle}>Repositories</Text>
+          </Link>
+        </Pressable>
+        <Pressable onPress={() => console.log('Login text was clicked!')}>
+          <Link to="login">
+            <Text style={styles.containerTitle}>Login</Text>
+          </Link>
+        </Pressable>
+      </ScrollView>
     </View>
   );
 };

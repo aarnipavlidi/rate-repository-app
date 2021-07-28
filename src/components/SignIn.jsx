@@ -10,7 +10,15 @@ import TextStyling from './TextStyling'; // Otetaan käyttöön "TextStyling" ko
 // jonka kautta se saa käyttöönsä {...} sisällä olevat tyylien arvot.
 const container = StyleSheet.create({
   container: {
-    flexGrow: 1
+    alignItems: 'stretch',
+    backgroundColor: 'white',
+    height: '100%'
+  },
+  content: {
+    flexDirection: 'row',
+    flexGrow: 2,
+    marginTop: 10,
+    justifyContent: 'center'
   }
 });
 
@@ -23,7 +31,9 @@ const container = StyleSheet.create({
 const SignIn = () => {
   return (
     <View style={container.container}>
-      <TextStyling>The sign in view</TextStyling>
+      <View style={container.content}>
+        <TextStyling>The sign in view</TextStyling>
+      </View>
     </View>
   );
 };
