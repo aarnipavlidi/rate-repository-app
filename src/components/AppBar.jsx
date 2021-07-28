@@ -5,7 +5,7 @@ import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovel
 import Constants from 'expo-constants'; // Otetaan käyttöön "Constants" komponentti => "expo-constants" kirjaston kautta sovelluksen käytettäväksi.
 import { Text, StyleSheet, View, Pressable } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
-import styling from '../styling';
+import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
 
 // Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion,
 // jonka kautta se saa käyttöönsä {...} sisällä olevat tyylien arvot.
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 });
 
 // Alustetaan "AppBar" niminen komponentti, joka suorittaa {...} sisällä olevat asiat
-// aina kun kyseiseen komponenttiin tehdään viittaus. 
+// aina kun kyseiseen komponenttiin tehdään viittaus.
 const AppBar = () => {
   return (
     <View style={styles.container}>
@@ -38,7 +38,6 @@ const AppBar = () => {
     </View>
   );
 };
-
 
 // Viedään (export) alla oleva komponentti (AppBar) sovelluksen käytettäväksi, jotta esim. "App.js" tiedosto pystyy suorittamaan kyseiset funktiot.
 export default AppBar;

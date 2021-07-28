@@ -4,28 +4,38 @@
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
 import { View, Image, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
-import TextStyling from './TextStyling';
-import styling from '../styling';
+import TextStyling from './TextStyling'; // Otetaan käyttöön "TextStyling" komponentti (TextStyling.jsx) sovelluksen käytettäväksi.
+import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
 
-
+// Alustetaan "formatValue" muuttuja, joka suorittaa {...} sisällä olevat asiat aina,
+// kun kyseiseen funktioon tehdään viittaus. Funktio siis tarkistaa, "repositories"
+// datan kautta tulevan objektin arvon (esim. "stargazersCount") "tier" muuttujan avulla.
+// Jos arvo on esim. "500" niin funktio ei tee mitään vaan palauttaa takaisin alkuperäisen
+// arvon näkyviin käyttäjälle ja muussa tapauksessa, jos arvo on esim. "1234" niin funktio
+// palauttaa "1" (yhden) desimaalin tarkkuudella takaisin => "1,2k" arvon käyttäjälle näkyviin.
 const formatValue = (getValue) => {
 
-  const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
-  const tier = Math.log10(Math.abs(getValue)) / 3 | 0;
+  const SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"]; // Alustetaan "SI_SYMBOL" muuttuja, joka saa taulukollisen erilaisia arvoja.
+  const tier = Math.log10(Math.abs(getValue)) / 3 | 0; // Alustetaan "tier" niminen muuttuja, joka suorittaa kyseisen funktion.
 
+  // Jos "tier" muuttujan arvo on funktion viittauksen yhteydessä arvoa "0" (nolla),
+  // niin funktio palauttaa takaisin "getValue" (alkuperäisen) arvon käyttäjälle.
   if (tier === 0) {
     return getValue;
   };
 
-  const suffix = SI_SYMBOL[tier];
-  const scale = Math.pow(10, tier * 3);
+  const suffix = SI_SYMBOL[tier]; // Alustetaan "suffix" niminen muuttuja, joka on yhtä kuin kyseinen arvo.
+  const scale = Math.pow(10, tier * 3); // Alustetaan "scale" niminen muuttuja, joka suorittaa kyseisen funktion.
 
-  const scaled = getValue / scale;
+  const scaled = getValue / scale; // Alustetaan "scaled" niminen muuttuja, joka jakaa "getValue" muuttujan "scale" muuttujan arvolla.
 
-  return scaled.toFixed(1) + suffix;
-
+  return scaled.toFixed(1) + suffix; // Funktio palauttaa takaisin käyttäjälle arvon yhden desimaalin tarkkuudella.
 };
 
+// Alustetaan "repositoriesContainer" niminen muuttuja, joka suorittaa kyseisen funktion ja
+// saa käyttöönsä {...} sisällä olevat tyylien arvot. Tämän avulla jokainen arvo "repositories"
+// muuttujan datasta sijoittuvat tämän elementin sisälle "laatikkoon"  (container) eli
+// <View>...ensimmäinen...</View> => <View>...toinen...</View> jne...
 const repositoriesContainer = StyleSheet.create({
   container: {
     alignItems: 'stretch',
@@ -33,6 +43,8 @@ const repositoriesContainer = StyleSheet.create({
   }
 });
 
+// Alustetaan "repositoriesAvatarStyling" niminen muuttuja, joka suorittaa kyseisen
+// funktion ja saa käyttöönsä {...} sisällä olevat tyylien arvot.
 const repositoriesAvatarStyling = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -55,6 +67,8 @@ const repositoriesAvatarStyling = StyleSheet.create({
   }
 });
 
+// Alustetaan "repositoriesTagStyling" niminen muuttuja, joka suorittaa kyseisen
+// funktion ja saa käyttöönsä {...} sisällä olevat tyylien arvot.
 const repositoriesTagStyling = StyleSheet.create({
   container: {
     alignSelf: 'flex-start',
@@ -72,6 +86,8 @@ const repositoriesTagStyling = StyleSheet.create({
   }
 });
 
+// Alustetaan "repositoriesDataStyling" niminen muuttuja, joka suorittaa kyseisen
+// funktion ja saa käyttöönsä {...} sisällä olevat tyylien arvot.
 const repositoriesDataStyling = StyleSheet.create({
   container: {
     flexDirection: 'row',
@@ -96,23 +112,28 @@ const repositoriesDataStyling = StyleSheet.create({
 // käsiksi "item" parametrin avulla.
 const RepositoryItem = ({ item }) => {
 
+  // Alustetaan "AvatarContainer" komponentti, joka suorittaa {...} sisällä olevat asiat aina,
+  // kun kyseiseen komponenttiin tehdään viittaus. Komponentti määrittää, että miten sovellus
+  // renderöi jokaisen arvon (item), johon sisältyy "ownerAvatarUrl", "fullName" sekä
+  // "description" objektien arvot. Nämä kaikki arvot rendröidään saman "laatikon" sisälle.
   const AvatarContainer = () => {
     return (
       <View style={repositoriesAvatarStyling.container}>
-
         <View style={repositoriesAvatarStyling.avatarContainer}>
           <Image style={repositoriesAvatarStyling.avatar} source={{uri: item.ownerAvatarUrl}} />
         </View>
-
         <View style={repositoriesAvatarStyling.infoContainer}>
           <TextStyling fontWeight="bold" fontSize="subheading">{item.fullName}</TextStyling>
           <TextStyling color="textSecondary">{item.description}</TextStyling>
         </View>
-
       </View>
     );
   };
 
+  // Alustetaan "TagContainer" komponentti, joka suorittaa {...} sisällä olevat asiat aina,
+  // kun kyseiseen komponenttiin tehdään viittaus. Komponentti määrittää, että miten sovellus
+  // renderöi jokaisen arvon (item), johon sisältyy "language" objektin arvo. Objektin arvo
+  // renderöidään omalle "laatikolle" => "AvatarContainer" komponentin alapuolelle.
   const TagContainer = () => {
     return (
       <View style={repositoriesTagStyling.container}>
@@ -121,6 +142,11 @@ const RepositoryItem = ({ item }) => {
     );
   };
 
+  // Alustetaan "DataContainer" komponentti, joka suorittaa {...} sisällä olevat asiat aina,
+  // kun kyseiseen komponenttiin tehdään viittaus. Komponentti määrittää, että miten sovellus
+  // renderöi jokaisen arvon (item), johon sisältyy "stargazersCount", "forksCount", "reviewCount"
+  // sekä "ratingAverage" objektien arvot. Nämä kaikki renderöidään samallee "laatikolle"
+  // "TagContainer" komponentin alapuolelle.
   const DataContainer = () => {
     return (
       <View style={repositoriesDataStyling.container}>
