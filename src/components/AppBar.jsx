@@ -2,6 +2,7 @@
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
+import { Link } from 'react-router-native'; // Otetaan kyseiset komponentit käyttöön "react-router-native" kirjaston kautta sovelluksen käytettäväksi.
 import Constants from 'expo-constants'; // Otetaan käyttöön "Constants" komponentti => "expo-constants" kirjaston kautta sovelluksen käytettäväksi.
 import { Text, StyleSheet, View, Pressable } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
@@ -13,9 +14,11 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
     paddingBottom: Constants.statusBarHeight,
+    backgroundColor: styling.appBarContainer.backgroundColor,
     flexGrow: 1,
     flexShrink: 1,
-    backgroundColor: styling.appBarContainer.backgroundColor
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
   },
   containerTitle: {
     marginTop: 25,
@@ -33,7 +36,14 @@ const AppBar = () => {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => console.log('Repositories text was clicked!')}>
-        <Text style={styles.containerTitle}>Repositories</Text>
+        <Link to="/">
+          <Text style={styles.containerTitle}>Repositories</Text>
+        </Link>
+      </Pressable>
+      <Pressable onPress={() => console.log('Login text was clicked!')}>
+        <Link to="login">
+          <Text style={styles.containerTitle}>Login</Text>
+        </Link>
       </Pressable>
     </View>
   );
