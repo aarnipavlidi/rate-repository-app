@@ -8,6 +8,7 @@ import TextStyling from './TextStyling'; // Otetaan käyttöön "TextStyling" ko
 import FormikTextInput from './FormikTextInput'; // Otetaan käyttöön "FormikTextInput" komponentti (FormikTextInput.jsx) sovelluksen käytettäväksi.
 
 import { Formik } from 'formik'; // Otetaan käyttöön kyseiset komponentit "formik" kirjaston kautta sovelluksen käytettäväksi.
+import * as yup from 'yup' // Alustetaan muuttuja "yup", joka hyödyntää "yup" kirjaston sisältöä sovelluksen aikana.
 
 // Alustetaan "container" niminen muuttuja, joka suorittaa kyseisen funktion,
 // jonka kautta se saa käyttöönsä {...} sisällä olevat tyylien arvot.
@@ -25,15 +26,6 @@ const inputContainer = StyleSheet.create({
   container: {
     marginTop: 5,
     alignItems: 'center',
-  },
-  content: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    width: '91%',
-    marginTop: 15,
-    height: 40,
-    borderWidth: 3,
-    borderColor: 'grey'
   },
   buttonContent: {
     flexDirection: 'row',
@@ -60,6 +52,19 @@ const initialValues = {
   password: ''
 };
 
+// Alustetaan muuttuja "loginFormValidationSchema", joka suorittaa kyseisen funktion eli
+// kun käyttäjä yrittää kirjautua sisään sovellukseen, niin suoritetaan validointi sen
+// yhteydessä ja, jos "username" tai "password" objekti ei täytä alla olevia ehtoja,
+// niin lomake (Formik) ilmoittaa siitä käyttäjälle erikseen.
+const loginFormValidationSchema = yup.object().shape({
+  username: yup
+    .string()
+    .required('Username is required.'),
+  password: yup
+    .string()
+    .required('Password is required.')
+});
+
 // Alustetaan "LoginForm" niminen komponentti, joka suorittaa {...} sisällä olevat asiat aina,
 // kun kyseiseen komponenttiin tehdään viittaus. Komponentti siis renderöi takaisin käyttäjälle
 // "username" ja "password" objekteille omat kentät (input) sekä mahdollisuuden kirjautua sisään
@@ -68,14 +73,15 @@ const initialValues = {
 // Salasanan osalta olemme lisänneet "secureTextEntry" propsin, joka piilottaa käyttäjän antaman
 // salasanan pois näkyvistä näytöltä eli esim. salasana "Aarni" muuttuu => "*****".
 const LoginForm = ({ onSubmit }) => {
+
+  // Komponentti "LoginForm" renderöi (...) sisällä olevat asait takaisin käyttäjälle
+  // näkyviin. Koodia on muokattu niin, että siirretty lomakkeen tyylit (osittain)
+  // => "TextInput" komponentin alle, jotta voimme palauttaa käyttäjälle "oikean"
+  // tyylin riippuen siitä, että onko lomakkeen kenttä täytetty oikein vai väärin.
   return (
     <View style={inputContainer.container}>
-      <View style={inputContainer.content}>
-        <FormikTextInput style={inputContainer.testi} name="username" placeholder="Enter your username..."  />
-      </View>
-      <View style={inputContainer.content}>
-        <FormikTextInput style={inputContainer.testi} name="password" placeholder="Enter your password..." secureTextEntry={true}  />
-      </View>
+      <FormikTextInput name="username" placeholder="Enter your username..." />
+      <FormikTextInput name="password" placeholder="Enter your password..." secureTextEntry={true} />
       <Pressable style={inputContainer.buttonContent} onPress={onSubmit}>
         <Text style={inputContainer.buttonContentText}>LOG IN</Text>
       </Pressable>
@@ -99,7 +105,7 @@ const SignIn = () => {
   // Komponentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
   return (
     <View style={container.container}>
-        <Formik initialValues={initialValues} onSubmit={onSubmit}>
+        <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={loginFormValidationSchema}>
           {({ handleSubmit }) => <LoginForm onSubmit={handleSubmit} />}
         </Formik>
     </View>
