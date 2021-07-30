@@ -2,7 +2,9 @@
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
-import { TextInput as NativeTextInput, View, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { TextInput as NativeTextInput, View, Text, StyleSheet, Platform } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+
+import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
 
 // Alustetaan "loginValidationStyling" niminen muuttuja, joka suorittaa kyseisen funktion,
 // jonka kautta se saa käyttöönsä {...} sisällä olevat tyylien arvot.
@@ -17,18 +19,33 @@ const loginValidationStyling = StyleSheet.create({
     marginTop: 15,
     height: 40,
     borderWidth: 2,
-    borderColor: 'grey'
+    borderColor: 'grey',
+    fontFamily: Platform.select({
+      android: styling.fonts.android,
+      ios: styling.fonts.ios,
+      default: styling.fonts.default
+    }),
   },
   contentError: {
     width: '91%',
     marginTop: 15,
     height: 40,
     borderWidth: 2,
-    borderColor: '#d73a4a'
+    borderColor: '#d73a4a',
+    fontFamily: Platform.select({
+      android: styling.fonts.android,
+      ios: styling.fonts.ios,
+      default: styling.fonts.default
+    }),
   },
   contentErrorMessage: {
     width: '91%',
     marginTop: 5,
+    fontFamily: Platform.select({
+      android: styling.fonts.android,
+      ios: styling.fonts.ios,
+      default: styling.fonts.default
+    }),
     color: '#d73a4a'
   },
 });

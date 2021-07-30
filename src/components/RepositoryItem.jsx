@@ -2,7 +2,7 @@
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
-import { View, Image, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { Platform, View, Image, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import TextStyling from './TextStyling'; // Otetaan käyttöön "TextStyling" komponentti (TextStyling.jsx) sovelluksen käytettäväksi.
 import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
@@ -60,10 +60,9 @@ const repositoriesAvatarStyling = StyleSheet.create({
   avatarContainer: {
     flexGrow: 0,
     paddingRight: 15,
-
   },
   infoContainer: {
-    flexGrow: 1
+    flexGrow: 1,
   }
 });
 
@@ -79,8 +78,12 @@ const repositoriesTagStyling = StyleSheet.create({
     marginLeft: 70
   },
   content: {
-    fontFamily: styling.fonts.main,
     fontSize: styling.fontSizes.tag,
+    fontFamily: Platform.select({
+      android: styling.fonts.android,
+      ios: styling.fonts.ios,
+      default: styling.fonts.default
+    }),
     color: 'white',
     padding: 5
   }
@@ -101,7 +104,19 @@ const repositoriesDataStyling = StyleSheet.create({
     alignItems: 'center'
   },
   data: {
-    fontWeight: styling.fontWeights.bold
+    fontWeight: styling.fontWeights.bold,
+    fontFamily: Platform.select({
+      android: styling.fonts.android,
+      ios: styling.fonts.ios,
+      default: styling.fonts.default
+    }),
+  },
+  dataTitle: {
+    fontFamily: Platform.select({
+      android: styling.fonts.android,
+      ios: styling.fonts.ios,
+      default: styling.fonts.default
+    }),
   }
 });
 
@@ -123,8 +138,8 @@ const RepositoryItem = ({ item }) => {
           <Image style={repositoriesAvatarStyling.avatar} source={{uri: item.ownerAvatarUrl}} />
         </View>
         <View style={repositoriesAvatarStyling.infoContainer}>
-          <TextStyling fontWeight="bold" fontSize="subheading">{item.fullName}</TextStyling>
-          <TextStyling color="textSecondary">{item.description}</TextStyling>
+          <TextStyling fontFamily={Platform.OS} fontWeight="bold" fontSize="subheading">{item.fullName}</TextStyling>
+          <TextStyling fontFamily={Platform.OS} color="textSecondary">{item.description}</TextStyling>
         </View>
       </View>
     );
@@ -152,19 +167,19 @@ const RepositoryItem = ({ item }) => {
       <View style={repositoriesDataStyling.container}>
         <View style={repositoriesDataStyling.content}>
           <Text style={repositoriesDataStyling.data}>{formatValue(item.stargazersCount)}</Text>
-          <Text>Stars</Text>
+          <Text style={repositoriesDataStyling.dataTitle}>Stars</Text>
         </View>
         <View style={repositoriesDataStyling.content}>
           <Text style={repositoriesDataStyling.data}>{formatValue(item.forksCount)}</Text>
-          <Text>Forks</Text>
+          <Text style={repositoriesDataStyling.dataTitle}>Forks</Text>
         </View>
         <View style={repositoriesDataStyling.content}>
           <Text style={repositoriesDataStyling.data}>{formatValue(item.reviewCount)}</Text>
-          <Text>Reviews</Text>
+          <Text style={repositoriesDataStyling.dataTitle}>Reviews</Text>
         </View>
         <View style={repositoriesDataStyling.content}>
           <Text style={repositoriesDataStyling.data}>{formatValue(item.ratingAverage)}</Text>
-          <Text>Rating</Text>
+          <Text style={repositoriesDataStyling.dataTitle}>Rating</Text>
         </View>
       </View>
     );

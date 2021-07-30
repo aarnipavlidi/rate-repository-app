@@ -2,7 +2,7 @@
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
-import { Text as NativeText, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { Text as NativeText, StyleSheet, Platform } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
 
@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   text: {
     color: styling.colors.textPrimary,
     fontSize: styling.fontSizes.body,
-    fontFamily: styling.fonts.main,
+    fontFamily: styling.fonts.default,
     fontWeight: styling.fontWeights.normal,
   },
   colorTextSecondary: {
@@ -28,19 +28,31 @@ const styles = StyleSheet.create({
   fontWeightBold: {
     fontWeight: styling.fontWeights.bold,
   },
+  fontFamilyForAndroid: {
+    fontFamily: styling.fonts.android
+  },
+  fontFamilyForIOS: {
+    fontFamily: styling.fonts.ios
+  },
+  fontFamilyForDefault: {
+    fontFamily: styling.fonts.default
+  }
 });
 
 // Alustetaan "TextStyling" komponetti, joka suorittaa {...} sisällä olevat asiat
 // aina, kun kyseiseen komponenttiin tehdään viittaus. Jos komponentin viittauksen
 // yhteydessä esim. "color" parametrin arvo on yhtä kuin => "primary", niin
 // komponentti palauttaa takaisin "styles.colorPrimary" tyylin käyttäjälle.
-const TextStyling = ({ color, fontSize, fontWeight, style, ...props }) => {
+const TextStyling = ({ color, fontSize, fontWeight, fontFamily, style, ...props }) => {
   const textStyle = [
     styles.text,
     color === 'textSecondary' && styles.colorTextSecondary,
     color === 'primary' && styles.colorPrimary,
     fontSize === 'subheading' && styles.fontSizeSubheading,
     fontWeight === 'bold' && styles.fontWeightBold,
+    fontFamily === 'android' && styles.fontFamilyForAndroid,
+    fontFamily === 'ios' && styles.fontFamilyForIOS,
+    fontFamily === 'default' && styles.fontFamilyForDefault,
     style,
   ];
 
