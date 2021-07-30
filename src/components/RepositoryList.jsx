@@ -1,10 +1,11 @@
 // This exercise has been commented by Aarni Pavlidi, if you have any questions or suggestions with the code,
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
-import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
+import React, { useState, useEffect } from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
 import { FlatList, View, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import RepositoryItem from './RepositoryItem'; // Tuodaan "RepositoryItem" (RepositoryItem.jsx) niminen komponentti sovelluksen käytettäväksi.
+import useRepositories from '../hooks/useRepositories'; // Alustetaan "useRepositories" niminen muuttuja, joka hyödyntää "useRepositories.js" tiedoston sisältöä.
 
 // Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion eli
 // kun data renderöidään takaisin käyttäjälle, niin jokaisen arvon väliin
@@ -14,53 +15,6 @@ const styles = StyleSheet.create({
     height: 10,
   },
 });
-
-const repositories = [ // Alustetaan "repositories" niminen muuttuja, joka saa [...] taulukollisen erilaisia arvoja.
-  {
-    id: 'jaredpalmer.formik',
-    fullName: 'jaredpalmer/formik',
-    description: 'Build forms in React, without the tears',
-    language: 'TypeScript',
-    forksCount: 1589,
-    stargazersCount: 21553,
-    ratingAverage: 88,
-    reviewCount: 4,
-    ownerAvatarUrl: 'https://avatars2.githubusercontent.com/u/4060187?v=4',
-  },
-  {
-    id: 'rails.rails',
-    fullName: 'rails/rails',
-    description: 'Ruby on Rails',
-    language: 'Ruby',
-    forksCount: 18349,
-    stargazersCount: 45377,
-    ratingAverage: 100,
-    reviewCount: 2,
-    ownerAvatarUrl: 'https://avatars1.githubusercontent.com/u/4223?v=4',
-  },
-  {
-    id: 'django.django',
-    fullName: 'django/django',
-    description: 'The Web framework for perfectionists with deadlines.',
-    language: 'Python',
-    forksCount: 21015,
-    stargazersCount: 48496,
-    ratingAverage: 73,
-    reviewCount: 5,
-    ownerAvatarUrl: 'https://avatars2.githubusercontent.com/u/27804?v=4',
-  },
-  {
-    id: 'reduxjs.redux',
-    fullName: 'reduxjs/redux',
-    description: 'Predictable state container for JavaScript apps',
-    language: 'TypeScript',
-    forksCount: 13902,
-    stargazersCount: 52869,
-    ratingAverage: 0,
-    reviewCount: 0,
-    ownerAvatarUrl: 'https://avatars3.githubusercontent.com/u/13142323?v=4',
-  },
-];
 
 // Alustetaan "ItemSeparator" niminen komponentti, joka suorittaa (...) sisällä olevat
 // asiat aina, kun kyseiseen komponenttiin tehdään viittaus. Komponentti saa myös
@@ -84,15 +38,31 @@ const ItemSeparator = ({ fullName, description, language, forksCount, stargazers
 // aina, kun kyseiseen komponenttiin tehdään viittaus.
 const RepositoryList = () => {
 
+  // Alustetaan "repositories" niminen muuttuja, jonka olemme alustaneet "useRepositories"
+  // hookin kautta, missä kyseinen hook palauttaa takaisin "repositories" muuttujan datan
+  // tämän komponentin käytettäväksi. Muuttuna avulla päästään käsiksi palvelimen kautta
+  // tulevaan dataan, jotta voimme näyttää datan takaisin käyttäjälle näkyviin.
+  const { repositories } = useRepositories();
+
+  // Alustetaan "repositoryNodes" muuttuja, joka on yhtä kuin "repositories" muuttuja,
+  // jos muuttuja on "tyhjä" eli ei ole dataa, niin palautetaan takaisin "[]" eli
+  // tyhjä taulukko ja muuussa tapauksessa suoritetaan alla olevan kyseinen funktio.
+  const repositoryNodes = repositories
+    ? repositories.edges.map(results => results.node)
+    : [];
+
   // Komponentti "RepositoryList" renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
   // "FlatList" komponentti saa käyttöönsä alla olevat propsien arvot missä "data" määrittää mitä
   // dataa halutaan näyttää käyttäjälle, "ItemSeparatorComponent" määrittää, että missä muodossa
   // data näytetään (tyyli yms.) ja "renderItem" renderöi jokaisen arvon "data" propsin kautta,
-  // jotka noudattavat "ItemSeparatorComponent" komponentin rakennetta.
+  // jotka noudattavat "ItemSeparatorComponent" komponentin rakennetta. Lisätty tehtävää varten
+  // eli "Exercise 10.11: fetching repositories with Apollo Client" => "keyExtractor" propsi, koska
+  // ilman sitä tuli "VirtualizedList: missing keys for items..." erroria terminaaliin näkyviin!
   return (
     <FlatList
-      data={repositories}
+      data={repositoryNodes}
       ItemSeparatorComponent={ItemSeparator}
+      keyExtractor={(item, index) => item.fullName}
       renderItem={RepositoryItem}
     />
   );
