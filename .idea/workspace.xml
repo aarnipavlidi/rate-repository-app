@@ -6,12 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="530eb360-56a1-46a7-a8cd-38f7d8809362" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AppBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppBar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/RepositoryItem.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/RepositoryItem.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SignIn.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SignIn.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TextInput.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TextInput.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TextStyling.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TextStyling.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/styling.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/styling.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,10 +37,11 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1627647989457">
+    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1627802986493">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-286.2560.1400@0.0.1920.1040" timestamp="1627647989457" />
+    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-208.2560.1400@0.0.1920.1040" timestamp="1627802986493" />
+    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-286.2560.1400@0.0.1920.1040" timestamp="1627674330775" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1627064309508">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
