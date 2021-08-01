@@ -6,10 +6,15 @@ import { NativeRouter } from 'react-router-native'; // Otetaan kyseiset komponen
 
 import { ApolloProvider } from '@apollo/client'; // Otetaan käyttöön kyseiset komponentit "@apollo/client" kirjaston kautta sovelluksen käytettäväksi.
 import createApolloClient from './src/utils/apolloClient'; // Alustetaan "createApolloClient" niminen muuttuja, joka hyödyntää "apolloClient.js" tiedoston sisältöä.
+import AuthStorage from './src/utils/authStorage'; // Alustetaan "AuthStorage" funktio, joka hyödyntää "authStorage.js" tiedoston sisältöä sovelluksen aikana.
+import AuthStorageContext from './src/contexts/AuthStorageContext'; // Alustetaan "AuthStorageContext" funktio, joka hyödyntää "AuthStorageContext.js" tiedoston sisältöä sovelluksen aikana.
 
 import Main from './src/components/Main'; // Tuodaan "Main" (Main.jsx) niminen komponentti sovelluksen käytettäväksi.
 
-const apolloClient = createApolloClient(); // Alustetaan "apolloClient" muuttuja, joka suorittaa kyseisen funktion.
+const authStorage = new AuthStorage(); // Alustetaan "authStorage" muuttuja, joka suorittaa kyseisen funktion.
+// Tehtävän "Exercise 10.14: storing the access token step1" jälkeen muokattu alla olevaa funktiota
+// "createApolloClient(...)", niin että lisätty sille parametrin arvoksi muuttujan arvo => "authStorage".
+const apolloClient = createApolloClient(authStorage); // Alustetaan "apolloClient" muuttuja, joka suorittaa kyseisen funktion.
 
 // Alustetaan "App" niminen komponetti, joka suorittaa {...} sisällä olevat asiat aina,
 // kun kyseiseen komponenttiin tehdään viittaus.
@@ -17,7 +22,9 @@ const App = () => {
   return (
     <NativeRouter>
       <ApolloProvider client={apolloClient}>
-        <Main />
+        <AuthStorageContext.Provider value={authStorage}>
+          <Main />
+        </AuthStorageContext.Provider>
       </ApolloProvider>
     </NativeRouter>
   );

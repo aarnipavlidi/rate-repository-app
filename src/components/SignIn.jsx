@@ -3,6 +3,7 @@
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
 import { Platform, View, Pressable, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { useHistory } from 'react-router-native'; // Otetaan käyttöön "useHistory" funktio, joka hyödyntää "react-router-native" kirjaston sisältöä sovelluksen aikana.
 
 import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
 import FormikTextInput from './FormikTextInput'; // Otetaan käyttöön "FormikTextInput" komponentti (FormikTextInput.jsx) sovelluksen käytettäväksi.
@@ -104,6 +105,7 @@ const LoginForm = ({ onSubmit }) => {
 // sisällön takaisin, riippuen siitä mitä painiketta (AppBar) käyttäjä on klikannut.
 const SignIn = () => {
 
+  const history = useHistory(); // Alustetaan "history" muuttuja, joka suorittaa kyseisen funktion.
   const [signIn] = useSignIn(); // Alustetaan kyseinen funktio, joka hyödyntää "useSignIn(...)" hookkia tämän komponentin osalta.
 
   // Alustetaan "onSubmit" niminen muuttuja, joka suorittaa {...} sisällä olevat
@@ -120,6 +122,7 @@ const SignIn = () => {
       // muuttujan, jos se löydää palvelimelta sen hetkisen kirjautuneen tiedot ja palauttaa
       // takaisin data, johon me pääsemme sitten käsiksi tämän alla olevan "data" muuttujan avulla.
       const { data } = await signIn({ username, password });
+      history.push('/'); // Kun käyttäjä kirjautuu sisään onnistuneesti, niin sovellus siirtää käyttäjän takaisin etusivulle (mistä löytyy "repositories" arvot).
       console.log(data.authorize.accessToken); // Tulostetaan kyseinen muuttujan arvo takaisin konsoliin näkyviin.
     } catch (error) { // Jos tulee funktion suorittamisen aikana virheitä, niin suoritetaan {...} sisällä olevat asiat.
       console.log(error); // Tulostetaan "error" muuttujan arvo takaisin konsoliin näkyviin.
