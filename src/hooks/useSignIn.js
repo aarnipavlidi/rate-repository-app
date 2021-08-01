@@ -1,8 +1,8 @@
 // This exercise has been commented by Aarni Pavlidi, if you have any questions or suggestions with the code,
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
-import { useMutation } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
-import { USER_LOGIN } from '../graphql/mutations'; // Otetaan kyseiset mutaatiot sovelluksen käytettäväksi "queries.js" tiedoston kautta.
+import { useMutation } from '@apollo/client'; // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
+import { USER_LOGIN } from '../graphql/mutations'; // Otetaan kyseiset mutaatiot sovelluksen käytettäväksi "mutations.js" tiedoston kautta.
 
 // https://www.apollographql.com/docs/react/api/react/hooks/#useapolloclient
 import { useApolloClient } from '@apollo/client'; // Otetaan käyttöön "useApolloClient" funktio kyseisen kirjaston kautta sovelluksen ajaksi.

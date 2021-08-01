@@ -24,3 +24,15 @@ export const GET_ALL_REPOSITORIES = gql`
     }
   }
 `
+
+// Alustetaan "GET_CURRENT_USER_DATA" niminen query, joka suorittaa alla olevan queryn
+// aina, kun kyseiseen queryyn tehdään viittaus. Query palauttaa takaisin palvelimen
+// kautta tulevan data, josta löytyy sen hetkinen kirjatunut käyttäjä.
+export const GET_CURRENT_USER_DATA = gql`
+  query {
+    authorizedUser {
+      id
+      username
+    }
+  }
+`
