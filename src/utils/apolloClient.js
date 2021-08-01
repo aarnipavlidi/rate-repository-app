@@ -1,3 +1,6 @@
+// This exercise has been commented by Aarni Pavlidi, if you have any questions or suggestions with the code,
+// then please contact me by sending email at me@aarnipavlidi.fi <3
+
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import Constants from 'expo-constants'; // Otetaan käyttöön "Constants" komponentti => "expo-constants" kirjaston kautta sovelluksen käytettäväksi.
 
