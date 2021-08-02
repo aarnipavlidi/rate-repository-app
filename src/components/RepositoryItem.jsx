@@ -2,7 +2,8 @@
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
-import { Platform, View, Image, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { Platform, View, Image, Text, StyleSheet, Pressable } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { useHistory } from 'react-router-native'; // Otetaan käyttöön "useHistory" funktio, joka hyödyntää "react-router-native" kirjaston sisältöä sovelluksen aikana.
 
 import TextStyling from './TextStyling'; // Otetaan käyttöön "TextStyling" komponentti (TextStyling.jsx) sovelluksen käytettäväksi.
 import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
@@ -132,16 +133,24 @@ const RepositoryItem = ({ item }) => {
   // renderöi jokaisen arvon (item), johon sisältyy "ownerAvatarUrl", "fullName" sekä
   // "description" objektien arvot. Nämä kaikki arvot rendröidään saman "laatikon" sisälle.
   const AvatarContainer = () => {
+
+    const history = useHistory(); // Alustetaan "history" muuttuja, joka suorittaa kyseisen funktion.
+
+    // Muokattu "Exercise 10.19: the single repository view" tehtävää varten alla olevaa koodia,
+    // niin että kun käyttäjä klikkaa "avatar" laatikon sisällä, niin sovellus renderöi toisen
+    // komponentin ja näyttää takaisin vain klikatun "repository":n arvot käyttäjälle.
     return (
-      <View style={repositoriesAvatarStyling.container}>
-        <View style={repositoriesAvatarStyling.avatarContainer}>
-          <Image style={repositoriesAvatarStyling.avatar} source={{uri: item.ownerAvatarUrl}} />
+      <Pressable onPress={() => history.push(`/${item.id}`)}>
+        <View style={repositoriesAvatarStyling.container}>
+            <View style={repositoriesAvatarStyling.avatarContainer}>
+              <Image style={repositoriesAvatarStyling.avatar} source={{uri: item.ownerAvatarUrl}} />
+            </View>
+            <View style={repositoriesAvatarStyling.infoContainer}>
+              <TextStyling fontFamily={Platform.OS} fontWeight="bold" fontSize="subheading">{item.fullName}</TextStyling>
+              <TextStyling fontFamily={Platform.OS} color="textSecondary">{item.description}</TextStyling>
+            </View>
         </View>
-        <View style={repositoriesAvatarStyling.infoContainer}>
-          <TextStyling fontFamily={Platform.OS} fontWeight="bold" fontSize="subheading">{item.fullName}</TextStyling>
-          <TextStyling fontFamily={Platform.OS} color="textSecondary">{item.description}</TextStyling>
-        </View>
-      </View>
+      </Pressable>
     );
   };
 
@@ -189,9 +198,9 @@ const RepositoryItem = ({ item }) => {
   // Komponentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
   return (
     <View style={repositoriesContainer.container}>
-      <AvatarContainer />
-      <TagContainer />
-      <DataContainer />
+        <AvatarContainer />
+        <TagContainer />
+        <DataContainer />
     </View>
   );
 };

@@ -2,11 +2,13 @@
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
-import { Route, Switch, Redirect } from 'react-router-native'; // Otetaan kyseiset komponentit käyttöön "react-router-native" kirjaston kautta sovelluksen käytettäväksi.
+// Lisätty "Exercise 10.19: the single repository view" tehtävää varten "useParams" funktio.
+import { Route, Switch, Redirect, useParams } from 'react-router-native'; // Otetaan kyseiset komponentit käyttöön "react-router-native" kirjaston kautta sovelluksen käytettäväksi.
 import Constants from 'expo-constants'; // Otetaan käyttöön "Constants" komponentti => "expo-constants" kirjaston kautta sovelluksen käytettäväksi.
 import { Text, StyleSheet, View } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import RepositoryList from './RepositoryList'; // Tuodaan "RepositoryList" (RepositoryList.jsx) niminen komponentti sovelluksen käytettäväksi.
+import RepositoryListByID from './RepositoryListByID'; // Tuodaan "RepositoryListByID" (RepositoryListByID.jsx) niminen komponentti sovelluksen käytettäväksi.
 import AppBar from './AppBar'; // Tuodaan "AppBar" (AppBar.jsx) niminen komponentti sovelluksen käytettäväksi.
 import SignIn from './SignIn'; // Tuodaaan "SignIn" (SignIn.jsx) niminen komponentti sovelluksen käytettäväksi.
 
@@ -25,6 +27,9 @@ const styles = StyleSheet.create({
 const Main = () => {
 
   // Komponentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
+  // Muokattu alla olevaa koodia niin, (Exercise 10.19: the single repository view),
+  // että kun käyttäjä klikkaa tiettyä "repository":n arvoa, niin sovellus renderöi
+  // "RepositoryListByID" komponentin takaisin käyttäjälle näkyviin.
   return (
     <View style={styles.appBackground}>
       <AppBar />
@@ -34,6 +39,9 @@ const Main = () => {
         </Route>
         <Route path="/" exact>
           <RepositoryList />
+        </Route>
+        <Route path="/:id" exact>
+          <RepositoryListByID />
         </Route>
         <Redirect to="/" />
       </Switch>

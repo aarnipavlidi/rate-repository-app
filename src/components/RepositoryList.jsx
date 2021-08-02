@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 // käyttöönsä ({...}) sisällä olevat parametrien arvot. Nämä viittaavaat "repositories"
 // muuttujan kautta tulevan datan objektien arvoihin, jonka kautta "RepositoryItem"
 // komponentti pystyy renderöidään jokaisen "uniikin arvon" omalle "laatikolle".
-const ItemSeparator = ({ fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl }) => (
+const ItemSeparator = ({ id, fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl }) => (
   <View style={styles.separator}>
     <Text>{fullName}</Text>
     <Text>{description}</Text>

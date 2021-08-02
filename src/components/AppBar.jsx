@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
     paddingBottom: Constants.statusBarHeight,
     backgroundColor: styling.appBarContainer.backgroundColor,
-    flexGrow: 1,
     flexDirection: 'row',
     justifyContent: 'space-evenly'
   },
