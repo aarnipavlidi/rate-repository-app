@@ -83,11 +83,18 @@ const CheckUserStatus = () => {
   // (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
   if (currentUser !== null) {
     return (
-      <Pressable>
-        <Link to="/">
-          <Text onPress={handleUserLogout} style={styles.containerTitle}>Logout</Text>
-        </Link>
-      </Pressable>
+      <View style={{flexDirection: 'row'}}>
+        <Pressable>
+          <Link to="/CreateReview">
+            <Text style={styles.containerTitle}>Create a review</Text>
+          </Link>
+        </Pressable>
+        <Pressable>
+          <Link to="/">
+            <Text onPress={handleUserLogout} style={styles.containerTitle}>Logout</Text>
+          </Link>
+        </Pressable>
+      </View>
     );
   };
 

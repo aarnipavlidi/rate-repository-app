@@ -17,3 +17,28 @@ export const USER_LOGIN = gql`
     }
   }
 `
+
+// Alustetaan "CREATE_NEW_REVIEW" niminen mutaatio, joka suorittaa alla olevan mutaation.
+// Kun käyttäjä haluaa lisätä uuden arvostelun tietylle "repository":n arvolle, niin kyseinen
+// mutaatio suoritetaan. Mutaatio hyödyntää "CreateReviewInput" tyyppiä, joka odottaa että
+// kun lisätään uutta arvoa niin sieltä löytyy neljä (4) erilaista objektin arvoa eli:
+//
+// 1) "repositoryName" (string) + pakollinen arvo.
+// 2) "ownerName" (string) + pakollinen arvo.
+// 3) "rating" (number) + pakollinen arvo.
+// 4) "text" (string) + valinnainen arvo.
+//
+// Näiden avulla voidaan suorittaa mutaatio onnistuneesti ja nämä objektien arvot
+// sijoitetaan "newReviewData" objektin alle, kun suoritetaan createNewReview(...)
+// funktio, joka sijaitsee siis => "useCreateNewReview.js" hookissa. Kun mutaatio
+// on suoritettu loppuun, niin meille riittää toistaiseksi tämän hetkiselle tehtävälle
+// eli "Exercise 10.21: the review form", että se palauttaa takaisin "repositoryId"
+// objektin arvon. Tämän avulla sovellus osaa ohjata kyseiseen "repository":n arvoon
+// mille käyttäjä on juuri luonut uuden arvostelun.
+export const CREATE_NEW_REVIEW = gql`
+  mutation createNewReview($newReviewData: CreateReviewInput) {
+    createReview(review: $newReviewData) {
+      repositoryId
+    }
+  }
+`

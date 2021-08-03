@@ -11,6 +11,7 @@ import RepositoryList from './RepositoryList'; // Tuodaan "RepositoryList" (Repo
 import RepositoryListByID from './RepositoryListByID'; // Tuodaan "RepositoryListByID" (RepositoryListByID.jsx) niminen komponentti sovelluksen käytettäväksi.
 import AppBar from './AppBar'; // Tuodaan "AppBar" (AppBar.jsx) niminen komponentti sovelluksen käytettäväksi.
 import SignIn from './SignIn'; // Tuodaaan "SignIn" (SignIn.jsx) niminen komponentti sovelluksen käytettäväksi.
+import CreateReview from './CreateReview'; // Tuodaan "CreateReview" (CreateReview.jsx) niminen komponentti sovelluksen käytettäväksi.
 
 // Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion,
 // jonka kautta se saa käyttöönsä {...} sisällä olevat tyylien arvot.
@@ -27,15 +28,18 @@ const styles = StyleSheet.create({
 const Main = () => {
 
   // Komponentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
-  // Muokattu alla olevaa koodia niin, (Exercise 10.19: the single repository view),
-  // että kun käyttäjä klikkaa tiettyä "repository":n arvoa, niin sovellus renderöi
-  // "RepositoryListByID" komponentin takaisin käyttäjälle näkyviin.
+  // Kun käyttäjä klikkaa tiettyä linkkiä esim. "Create a review", niin sovellus
+  // ohjaa käyttäjän => "/CreateReview" osoitteeseen, minkä kautta siihen vastaava
+  // komponentti renderöidään takaisin käyttäjälle eli => "<CreateReview />".
   return (
     <View style={styles.appBackground}>
       <AppBar />
       <Switch>
         <Route path="/login" exact>
           <SignIn />
+        </Route>
+        <Route path="/CreateReview" exact>
+          <CreateReview />
         </Route>
         <Route path="/" exact>
           <RepositoryList />

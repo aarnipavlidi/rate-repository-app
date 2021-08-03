@@ -24,6 +24,7 @@ const useRepositoriesByID = () => {
   // niin "loading" muuttuja on arvoa "true", jota voidaan hyödyntää esim.
   // renderöimällä "spinner" yms. takaisin käyttäjälle näkyviin.
   const { data, error, loading } = useQuery(GET_CURRENT_REPOSITORY, {
+    fetchPolicy: 'cache-and-network',
     variables: { repositoryID: id }
   });
 
