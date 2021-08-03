@@ -48,6 +48,35 @@ export const GET_CURRENT_REPOSITORY = gql`
   }
 `
 
+// Alustetaan "GET_CURRENT_REPOSITORY_REVIEWS" niminen query, joka suorittaa
+// alla olevan queryn aina, kun kyseiseen queryyn tehdään viittaus. Query
+// näyttää siis sen hetkisen klikatun "repository" arvon kaikki arvostelut.
+// Jos sen hetkisellä arvolla ei ole annettu toistaiseksi mitään arvostelua,
+// niin sovellus renderöi takaisin tyhjän taulukon. Tämän ominaisuus on
+// toteutettu "RepositoryListByID" komponentissa.
+export const GET_CURRENT_REPOSITORY_REVIEWS = gql`
+  query showCurrentRepositoryReviews($repositoryID: ID!) {
+    repository(id: $repositoryID) {
+      id
+      fullName
+      reviews {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            user {
+              id
+              username
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
 // Alustetaan "GET_CURRENT_USER_DATA" niminen query, joka suorittaa alla olevan queryn
 // aina, kun kyseiseen queryyn tehdään viittaus. Query palauttaa takaisin palvelimen
 // kautta tulevan data, josta löytyy sen hetkinen kirjatunut käyttäjä.

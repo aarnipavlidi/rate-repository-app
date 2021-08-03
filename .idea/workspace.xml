@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="530eb360-56a1-46a7-a8cd-38f7d8809362" name="Default Changelist" comment="" />
+    <list default="true" id="530eb360-56a1-46a7-a8cd-38f7d8809362" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/RepositoryListByID.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/RepositoryListByID.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphql/queries.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/queries.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/useRepositories.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useRepositories.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -35,10 +40,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1627923691517">
+    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1628006528682">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-208.2560.1400@0.0.1920.1040" timestamp="1627923691517" />
+    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-208.2560.1400@0.0.1920.1040" timestamp="1628006528682" />
     <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-286.2560.1400@0.0.1920.1040" timestamp="1627674330775" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1627064309508">
       <screen x="0" y="0" width="1920" height="1040" />

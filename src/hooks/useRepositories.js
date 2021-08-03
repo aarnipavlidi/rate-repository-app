@@ -43,7 +43,7 @@ const useRepositories = () => {
   }, [data]);
 
   // "useRepositories" hookki palauttaa takaisin {...} sisällä olevat muuttujat muiden komponenttien käytettäväksi.
-  return { repositories, loading, refetch: fetchRepositories  };
+  return { repositories, loading, refetch: fetchRepositories };
 };
 
 // Viedään (export) alla oleva hookki (useRepositories) sovelluksen käytettäväksi, jotta esim. "App.js" tiedosto pystyy suorittamaan kyseiset funktiot.
