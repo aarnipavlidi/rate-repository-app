@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FilterRepositoriesHeader.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FilterRepositoriesHeader.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/RepositoryList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/RepositoryList.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/graphql/queries.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/queries.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks/useRepositories.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useRepositories.js" afterDir="false" />
@@ -42,10 +43,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1628084649891">
+    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1628098034684">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-208.2560.1400@0.0.1920.1040" timestamp="1628084649891" />
+    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-208.2560.1400@0.0.1920.1040" timestamp="1628098034684" />
     <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-286.2560.1400@0.0.1920.1040" timestamp="1627674330775" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1627064309508">
       <screen x="0" y="0" width="1920" height="1040" />

@@ -14,9 +14,15 @@ import { gql } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funk
 // vaihtoehtona on joko "DESC" tai "ASC". Oletuksena kun käyttäjä avaa sovelluksen ensimmäistä kertaa tai palaa
 // takaisin näkymään missä on kaikki "repository":n arvot, niin query saa parametrin arvoksi "CREATED_AT" ja
 // "DESC" eli näytetään käyttäjälle aina ensimmäisenä viimeisin/uusin arvostelu siihen "repository":n arvoon.
+//
+// Lisätty "Exercise 10.24: filtering the reviewed repositories list" tehtävää varten uusi parametin arvo eli
+// "$filterInputValue", ja query odottaa että kyseessä on "String" tyyppi. Muuttujan arvo sijoitetaan objektin
+// "searchKeyword" alle, jonka kautta queryn suorittamisen yhteydessä palautetaan ne arvot mitkä täsmäävät
+// käyttäjän antaman hakukentän arvon kanssa. Oletuksena objektin arvo saa => '' eli se palauttaa kaikki
+// "repository":n arvot takaisin käyttäjälle näkyviin sovelluksen etusivulle.
 export const GET_ALL_REPOSITORIES = gql`
-  query showAllRepositories($orderBySetting: AllRepositoriesOrderBy, $orderDirectionSetting: OrderDirection) {
-    repositories(orderBy: $orderBySetting, orderDirection: $orderDirectionSetting) {
+  query showAllRepositories($orderBySetting: AllRepositoriesOrderBy, $orderDirectionSetting: OrderDirection, $filterInputValue: String) {
+    repositories(orderBy: $orderBySetting, orderDirection: $orderDirectionSetting, searchKeyword: $filterInputValue) {
       edges {
         node {
           id

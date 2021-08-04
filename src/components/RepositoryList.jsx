@@ -2,6 +2,7 @@
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
 import React, { useState } from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
+import { useDebounce } from 'use-debounce'; // Alustetaan "useDebounce" funktio, joka hyödyntää "use-debounce" kirjaston sisältöä sovelluksen aikana.
 import { FlatList, View, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import RepositoryItem from './RepositoryItem'; // Tuodaan "RepositoryItem" (RepositoryItem.jsx) niminen komponentti sovelluksen käytettäväksi.
@@ -26,6 +27,18 @@ const RepositoryList = () => {
   const [orderByState, setOrderByState] = useState('CREATED_AT'); // Alustetaan "orderByState" muuttuja tilaan, joka saa oletuksena kyseisen tekstin arvoksi.
   const [orderDirectionState, setOrderDirectionState] = useState('DESC'); // Alustetaan "orderDirectionState" muuttuja tilaan, joka saa oletuksena kyseisen tekstin arvoksi.
 
+  const [currentFilterInput, setCurrentFilterInput] = useState(''); // Alustetaan "currentFilterInput" muuttuja tilaan, joka saa oletuksena arvon => "".
+  // Alustetaan "debouncedFilterInput" muuttuja, joka suorittaa kyseisen funktion eli
+  // annamme "useDebounce(...)" funktiolle parametrin arvoksi "currentFilterInput".
+  // Kun käyttäjä kirjoittaa jotain hakukenttään, niin sen hetkinen arvo siirtyy
+  // "currentFilterInput" muuttujan alle, koska muutamme sen tilaa "setCurrentFilterInput"
+  // funktiota ja tämän jälkeen "debouncedFilterInput" muuttuja pääsee käsiksi
+  // kyseiseen arvoon yhden (1) sekunnin kuluttua siitä, kun "currentFilterInput"
+  // muuttuja on muuttunut sovelluksen käytön aikana. Tämän muuttujan avulla suoritetaan
+  // "useRepositories(...)" hookissa sijaitseva query ja palautetaan takaisin käyttäjälle
+  // ne arvot, jotka täsmäävät käyttäjän antaman hakukentän arvon kanssa!
+  const [debouncedFilterInput] = useDebounce(currentFilterInput, 1000);
+
   // Alustetaan "repositories" niminen muuttuja, jonka olemme alustaneet "useRepositories"
   // hookin kautta, missä kyseinen hook palauttaa takaisin "repositories" muuttujan datan
   // tämän komponentin käytettäväksi. Muuttuna avulla päästään käsiksi palvelimen kautta
@@ -35,8 +48,12 @@ const RepositoryList = () => {
   // arvoilla, jonka kautta itse query eli "GET_ALL_REPOSITORIES" suoritetaan ja haetaan
   // palvelimesta data takaisin käyttäjälle näkyviin. Aina, kun "orderByState" ja
   // "orderDirectionState" muuttujan tilaa muutetaan, niin kyseinen hookki suorittaa
-  // queryn uudestaan ja renderöi "oikean dataan" takaisin käyttäjälle näkyviin.
-  const { repositories } = useRepositories(orderByState, orderDirectionState);
+  // queryn uudestaan ja renderöi "oikean dataan" takaisin käyttäjälle näkyviin. Lisätty
+  // "Exercise 10.24: filtering the reviewed repositories list" tehtävää varten muuttujan
+  // "debouncedFilterInput" arvo, hookin parametrin arvoksi. Kun käyttäjä saapuu sovellukseen
+  // ensimmäistä kertaa, niin query suoritetaan ensin arvolla => '', ja siitä ei tule
+  // erroria, koska query odottaa "String" tyyppiä ja kyseessä on "String" tyyppi! :)
+  const { repositories } = useRepositories(orderByState, orderDirectionState, debouncedFilterInput);
 
   // Alustetaan "repositoryNodes" muuttuja, joka on yhtä kuin "repositories" muuttuja,
   // jos muuttuja on "tyhjä" eli ei ole dataa, niin palautetaan takaisin "[]" eli
@@ -58,7 +75,7 @@ const RepositoryList = () => {
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       keyExtractor={(item, index) => item.fullName}
       renderItem={({ item }) => <RepositoryItem item={item} />}
-      ListHeaderComponent={() => <FilterRepositoriesHeader currentFilter={currentFilter} setCurrentFilter={setCurrentFilter} setOrderByState={setOrderByState} setOrderDirectionState={setOrderDirectionState} />}
+      ListHeaderComponent={<FilterRepositoriesHeader currentFilter={currentFilter} setCurrentFilter={setCurrentFilter} currentFilterInput={currentFilterInput} setCurrentFilterInput={setCurrentFilterInput} setOrderByState={setOrderByState} setOrderDirectionState={setOrderDirectionState} />}
     />
   );
 };

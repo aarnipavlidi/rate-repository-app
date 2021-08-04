@@ -11,7 +11,7 @@ import { GET_ALL_REPOSITORIES } from '../graphql/queries'; // Otetaan kyseiset q
 // pääsevät käsiksi kyseisen muuttujan arvoon. Olemme myös muokanneet alla olevaa "useEffect(...)"
 // funktiota niin, että aina kun data ilmestyy "GET_ALL_REPOSITORIES" queryn alla, niin suoritetaan
 // kyseinen funktio, muussa tapauksessa ei tehdä mitään.
-const useRepositories = (currentOrderBy, currentOrderDirection) => {
+const useRepositories = (currentOrderBy, currentOrderDirection, currentFilterInput) => {
   const [repositories, setRepositories] = useState(); // Alustetaan "repositories" muuttuja tilaan.
 
   // Otetaan käyttöön "GET_ALL_REPOSITORIES" query, joka saa käyttöönsä "data",
@@ -21,7 +21,8 @@ const useRepositories = (currentOrderBy, currentOrderDirection) => {
   const {data, error, loading} = useQuery(GET_ALL_REPOSITORIES, {
     variables: {
       orderBySetting: currentOrderBy,
-      orderDirectionSetting: currentOrderDirection
+      orderDirectionSetting: currentOrderDirection,
+      filterInputValue: currentFilterInput
     },
     fetchPolicy: 'cache-and-network'
   });
