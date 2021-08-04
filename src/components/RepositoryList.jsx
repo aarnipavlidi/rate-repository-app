@@ -1,10 +1,11 @@
 // This exercise has been commented by Aarni Pavlidi, if you have any questions or suggestions with the code,
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
-import React, { useState, useEffect } from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
-import { FlatList, View, Text, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import React, { useState } from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
+import { FlatList, View, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import RepositoryItem from './RepositoryItem'; // Tuodaan "RepositoryItem" (RepositoryItem.jsx) niminen komponentti sovelluksen käytettäväksi.
+import FilterRepositoriesHeader from './FilterRepositoriesHeader'; // Tuodaan "FilterRepositoriesHeader" (FilterRepositoriesHeader.jsx) niminen komponentti sovelluksen käytettäväksi.
 import useRepositories from '../hooks/useRepositories'; // Alustetaan "useRepositories" niminen muuttuja, joka hyödyntää "useRepositories.js" tiedoston sisältöä.
 
 // Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion eli
@@ -16,33 +17,26 @@ const styles = StyleSheet.create({
   },
 });
 
-// Alustetaan "ItemSeparator" niminen komponentti, joka suorittaa (...) sisällä olevat
-// asiat aina, kun kyseiseen komponenttiin tehdään viittaus. Komponentti saa myös
-// käyttöönsä ({...}) sisällä olevat parametrien arvot. Nämä viittaavaat "repositories"
-// muuttujan kautta tulevan datan objektien arvoihin, jonka kautta "RepositoryItem"
-// komponentti pystyy renderöidään jokaisen "uniikin arvon" omalle "laatikolle".
-const ItemSeparator = ({ id, fullName, description, language, forksCount, stargazersCount, ratingAverage, reviewCount, ownerAvatarUrl }) => (
-  <View style={styles.separator}>
-    <Text>{fullName}</Text>
-    <Text>{description}</Text>
-    <Text>{language}</Text>
-    <Text>{stargazersCount}</Text>
-    <Text>{forksCount}</Text>
-    <Text>{reviewCount}</Text>
-    <Text>{ratingAverage}</Text>
-    <Text>{ownerAvatarUrl}</Text>
-  </View>
-);
-
 // Alustetaan "RepositoryList" niminen komponentti, joka suorittaa {...} sisällä olevat asiat
 // aina, kun kyseiseen komponenttiin tehdään viittaus.
 const RepositoryList = () => {
 
+  const [currentFilter, setCurrentFilter] = useState('Latest repositories'); // Alustetaan "currentFilter" muuttuja tilaan, joka saa oletuksena kyseisen tekstin arvoksi.
+
+  const [orderByState, setOrderByState] = useState('CREATED_AT'); // Alustetaan "orderByState" muuttuja tilaan, joka saa oletuksena kyseisen tekstin arvoksi.
+  const [orderDirectionState, setOrderDirectionState] = useState('DESC'); // Alustetaan "orderDirectionState" muuttuja tilaan, joka saa oletuksena kyseisen tekstin arvoksi.
+
   // Alustetaan "repositories" niminen muuttuja, jonka olemme alustaneet "useRepositories"
   // hookin kautta, missä kyseinen hook palauttaa takaisin "repositories" muuttujan datan
   // tämän komponentin käytettäväksi. Muuttuna avulla päästään käsiksi palvelimen kautta
-  // tulevaan dataan, jotta voimme näyttää datan takaisin käyttäjälle näkyviin.
-  const { repositories } = useRepositories();
+  // tulevaan dataan, jotta voimme näyttää datan takaisin käyttäjälle näkyviin. Muutettu
+  // tehtävää "Exercise 10.23: sorting the reviewed repositories list" varten alla olevaa
+  // koodia niin, että sovellus suorittaa kyseisen hookin (...) sisällä annetuilla parametrin
+  // arvoilla, jonka kautta itse query eli "GET_ALL_REPOSITORIES" suoritetaan ja haetaan
+  // palvelimesta data takaisin käyttäjälle näkyviin. Aina, kun "orderByState" ja
+  // "orderDirectionState" muuttujan tilaa muutetaan, niin kyseinen hookki suorittaa
+  // queryn uudestaan ja renderöi "oikean dataan" takaisin käyttäjälle näkyviin.
+  const { repositories } = useRepositories(orderByState, orderDirectionState);
 
   // Alustetaan "repositoryNodes" muuttuja, joka on yhtä kuin "repositories" muuttuja,
   // jos muuttuja on "tyhjä" eli ei ole dataa, niin palautetaan takaisin "[]" eli
@@ -61,9 +55,10 @@ const RepositoryList = () => {
   return (
     <FlatList
       data={repositoryNodes}
-      ItemSeparatorComponent={ItemSeparator}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
       keyExtractor={(item, index) => item.fullName}
-      renderItem={RepositoryItem}
+      renderItem={({ item }) => <RepositoryItem item={item} />}
+      ListHeaderComponent={() => <FilterRepositoriesHeader currentFilter={currentFilter} setCurrentFilter={setCurrentFilter} setOrderByState={setOrderByState} setOrderDirectionState={setOrderDirectionState} />}
     />
   );
 };

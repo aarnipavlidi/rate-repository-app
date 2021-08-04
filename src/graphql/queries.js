@@ -6,9 +6,17 @@ import { gql } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funk
 // Alustetaan "GET_ALL_REPOSITORIES" niminen query, joka suorittaa alla olevan queryn
 // aina, kun kyseiseen queryyn tehdään viittaus. Query palauttaa takaisin palvelimen
 // kautta tulevan datan, josta löytyy jokainen "repositories" arvo.
+//
+// Muutettu alla olevaa queryä "GET_ALL_REPOSITORIES" tehtävää "Exercise 10.23: sorting the reviewed repositories list"
+// varten niin, että sovellus suorittaa aina queryn kahdella (2) eri parametrin avulla eli "orderBySetting" sekä
+// "orderDirectionSetting". Ensimmäinen vaihtoehto noudattaa "AllRepositoriesOrderBy" tyyppiä, missä vaihtoehtona
+// on joko "CREATED_AT" tai "RATING_AVERAGE" sekä toinen vaihtoehto noudattaa "OrderDirection" tyyppiä missä
+// vaihtoehtona on joko "DESC" tai "ASC". Oletuksena kun käyttäjä avaa sovelluksen ensimmäistä kertaa tai palaa
+// takaisin näkymään missä on kaikki "repository":n arvot, niin query saa parametrin arvoksi "CREATED_AT" ja
+// "DESC" eli näytetään käyttäjälle aina ensimmäisenä viimeisin/uusin arvostelu siihen "repository":n arvoon.
 export const GET_ALL_REPOSITORIES = gql`
-  query {
-    repositories {
+  query showAllRepositories($orderBySetting: AllRepositoriesOrderBy, $orderDirectionSetting: OrderDirection) {
+    repositories(orderBy: $orderBySetting, orderDirection: $orderDirectionSetting) {
       edges {
         node {
           id

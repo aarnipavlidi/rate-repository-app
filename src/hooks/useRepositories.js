@@ -11,7 +11,7 @@ import { GET_ALL_REPOSITORIES } from '../graphql/queries'; // Otetaan kyseiset q
 // pääsevät käsiksi kyseisen muuttujan arvoon. Olemme myös muokanneet alla olevaa "useEffect(...)"
 // funktiota niin, että aina kun data ilmestyy "GET_ALL_REPOSITORIES" queryn alla, niin suoritetaan
 // kyseinen funktio, muussa tapauksessa ei tehdä mitään.
-const useRepositories = () => {
+const useRepositories = (currentOrderBy, currentOrderDirection) => {
   const [repositories, setRepositories] = useState(); // Alustetaan "repositories" muuttuja tilaan.
 
   // Otetaan käyttöön "GET_ALL_REPOSITORIES" query, joka saa käyttöönsä "data",
@@ -19,6 +19,10 @@ const useRepositories = () => {
   // hookin osalta. Voisimme esim. palauttaa takaisin käyttäjälle tekstin
   // "Data is loading!" => "if (loading) { return "your_text_here" }" ehdon avulla.
   const {data, error, loading} = useQuery(GET_ALL_REPOSITORIES, {
+    variables: {
+      orderBySetting: currentOrderBy,
+      orderDirectionSetting: currentOrderDirection
+    },
     fetchPolicy: 'cache-and-network'
   });
 
