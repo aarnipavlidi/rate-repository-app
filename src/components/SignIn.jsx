@@ -132,9 +132,9 @@ const SignIn = () => {
   // Komponentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
   return (
     <View style={container.container}>
-        <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={loginFormValidationSchema}>
-          {({ handleSubmit }) => <LoginForm onSubmit={handleSubmit} />}
-        </Formik>
+      <Formik initialValues={initialValues} onSubmit={onSubmit} validationSchema={loginFormValidationSchema}>
+        {({ handleSubmit }) => <LoginForm onSubmit={handleSubmit} />}
+      </Formik>
     </View>
   );
 };

@@ -100,11 +100,18 @@ const CheckUserStatus = () => {
 
   // Muussa tapauksessa komponentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin.
   return (
-    <Pressable>
-      <Link to="login">
-        <Text style={styles.containerTitle}>Login</Text>
-      </Link>
-    </Pressable>
+    <View style={{flexDirection: 'row'}}>
+      <Pressable>
+        <Link to="/login">
+          <Text style={styles.containerTitle}>Login</Text>
+        </Link>
+      </Pressable>
+      <Pressable>
+        <Link to="/CreateUser">
+          <Text style={styles.containerTitle}>Sign Up</Text>
+        </Link>
+      </Pressable>
+    </View>
   );
 };
 

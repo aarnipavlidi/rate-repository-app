@@ -11,6 +11,7 @@ import RepositoryList from './RepositoryList'; // Tuodaan "RepositoryList" (Repo
 import RepositoryListByID from './RepositoryListByID'; // Tuodaan "RepositoryListByID" (RepositoryListByID.jsx) niminen komponentti sovelluksen käytettäväksi.
 import AppBar from './AppBar'; // Tuodaan "AppBar" (AppBar.jsx) niminen komponentti sovelluksen käytettäväksi.
 import SignIn from './SignIn'; // Tuodaaan "SignIn" (SignIn.jsx) niminen komponentti sovelluksen käytettäväksi.
+import CreateUser from './CreateUser'; // Tuodaan "CreateUser" (CreateUser.jsx) niminen komponentti sovelluksen käytettäväksi.
 import CreateReview from './CreateReview'; // Tuodaan "CreateReview" (CreateReview.jsx) niminen komponentti sovelluksen käytettäväksi.
 
 // Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion,
@@ -37,6 +38,9 @@ const Main = () => {
       <Switch>
         <Route path="/login" exact>
           <SignIn />
+        </Route>
+        <Route path='/CreateUser' exact>
+          <CreateUser />
         </Route>
         <Route path="/CreateReview" exact>
           <CreateReview />

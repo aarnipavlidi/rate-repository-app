@@ -3,6 +3,24 @@
 
 import { gql } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
 
+// Alustetaan "CREATE_NEW_USER" niminen mutaatio, joka suorittaa alla olevan mutaation.
+// Kun käyttäjä haluaa rekisteröityä sovellukseen, niin kyseinen mutaatio suoritetaan
+// "newUserData" objektin avulla, johon sijoitetaan lomakkeen kautta tulevat "username"
+// ja "password" muuttujien arvot. Mutaatio hyödyntää "CreateUserInput" tyyppiä, joka
+// odottaa siis kaksi (2) erilaista arvoa eli "username" sekä "password". Molemmat
+// arvot ovat pakollisia ja molempien täytyy olla "String" muodossa. Jos mutaation
+// suorittaminen onnistuu, niin se palauttaa takaisin datan, josta löytyy "id",
+// "username" sekä "createdAt" objektien arvot, joita voidaan hyödyntää tarvittaessa!
+export const CREATE_NEW_USER = gql`
+  mutation createNewUser($newUserData: CreateUserInput) {
+    createUser(user: $newUserData) {
+      id
+      username
+      createdAt
+    }
+  }
+`
+
 // Alustetaan "USER_LOGIN" niminen mutaatio, joka suorittaa alla olevan mutaation. Mutaatio
 // siis hakee sillä hetkellä, kun käyttäjä yrittää kirjautua sisään sovellukseen, niin
 // palauttaa takaisin sen hetkisen kirjautuneen käyttäjän "accessToken" arvon. Mutaatio

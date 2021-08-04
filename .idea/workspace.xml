@@ -6,11 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="530eb360-56a1-46a7-a8cd-38f7d8809362" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AppBar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppBar.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphql/mutations.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphql/mutations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useRepositoriesByID.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useRepositoriesByID.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/useRepositoriesReviews.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/useRepositoriesReviews.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,10 +37,10 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1628022214607">
+    <state x="429" y="122" width="1200" height="801" key="AVDManager" timestamp="1628022740481">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-208.2560.1400@0.0.1920.1040" timestamp="1628022214607" />
+    <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-208.2560.1400@0.0.1920.1040" timestamp="1628022740481" />
     <state x="429" y="122" width="1200" height="801" key="AVDManager/0.0.1920.1040/-3840.-286.2560.1400@0.0.1920.1040" timestamp="1627674330775" />
     <state x="461" y="165" key="SettingsEditor" timestamp="1627064309508">
       <screen x="0" y="0" width="1920" height="1040" />
