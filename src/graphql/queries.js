@@ -129,11 +129,41 @@ export const GET_CURRENT_REPOSITORY_REVIEWS = gql`
 // Alustetaan "GET_CURRENT_USER_DATA" niminen query, joka suorittaa alla olevan queryn
 // aina, kun kyseiseen queryyn tehdään viittaus. Query palauttaa takaisin palvelimen
 // kautta tulevan data, josta löytyy sen hetkinen kirjatunut käyttäjä.
+//
+// Muutettu "Exercise 10.26: the user's reviews view" tehtävää varten alle olevaa
+// queryä, niin että jos käyttäjä on kirjautunut sisään sovellukseen, niin sovellus
+// hakee palvelimesta sen hetkisen kirjautuneen käyttäjän arvostelut "reviews"
+// objektin sisältä ja näyttää ne takaisin käyttäjälle näkyviin. Oletuksena
+// kun käyttäjä saapuu sovellukseen ensimmäistä kertaa eli etusivulle, niin objektin
+// "includeReviews" arvo saa arvoksi => "false". Käytämme tässä siis joko "false"
+// tai "true" metodia. Jos objektin arvo on yhtä kuin "true", niin query palauttaa
+// "reviews" objektin datan takaisin.
 export const GET_CURRENT_USER_DATA = gql`
-  query {
+  query getAuthorizedUser($includeReviews: Boolean!) {
     authorizedUser {
       id
       username
+      reviews @include(if: $includeReviews) {
+        edges {
+          node {
+            id
+            text
+            rating
+            createdAt
+            repositoryId
+            user {
+              id
+              username
+            }
+          }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
+        }
+      }
     }
   }
 `

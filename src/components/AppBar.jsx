@@ -3,6 +3,8 @@
 
 import React, { useState, useEffect } from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
 import { Link } from 'react-router-native'; // Otetaan kyseiset komponentit käyttöön "react-router-native" kirjaston kautta sovelluksen käytettäväksi.
+import { useHistory } from 'react-router-native'; // Otetaan käyttöön "useHistory" funktio, joka hyödyntää "react-router-native" kirjaston sisältöä sovelluksen aikana.
+
 import Constants from 'expo-constants'; // Otetaan käyttöön "Constants" komponentti => "expo-constants" kirjaston kautta sovelluksen käytettäväksi.
 import { Platform, Text, StyleSheet, ScrollView, View, Pressable } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
@@ -48,13 +50,29 @@ const styles = StyleSheet.create({
 // "setCurrentUser" funktiota, johon siirretään "authorizedUser" objektin data.
 const CheckUserStatus = () => {
 
+  const history = useHistory(); // Alustetaan "history" muuttuja, joka suorittaa kyseisen funktion.
+
   // Alla olevan muuttujan avulla pääsemme käsiksi välimuistissa olevaan
   // dataan ja vaikuttamaan siihen esim. poistamalla tiettyjä asioita yms.
   const client = useApolloClient(); // Alustetaan "client" muuttuja, joka suorittaa kyseisen funktion.
   const authStorage = useAuthStorage(); // Alustetaan "authStorage" muuttuja, joka suorittaa kyseisen funktion.
 
-  const checkCurrentUser = useQuery(GET_CURRENT_USER_DATA); // Alustetaan "checkCurrentUser" muuttuja, joka suorittaa kyseisen queryn.
   const [currentUser, setCurrentUser] = useState(null); // Alustetaan "currentUser" muuttuja tilaan, joka saa oletuksena arvon "null".
+
+  // Muutettu "Exercise 10.26: the user's reviews view" tehtävää varten alla olevaa queryä
+  // eli "GET_CURRENT_USER_DATA", niin että se suorittaa queryn konditionaalisti. Queryn
+  // objekti "includeReviews" odottaa "BOOLEAN" tyyppistä arvoa eli käytämme tässä, joko
+  // "true" tai "false" vaihtoehtoa. Oletuksena query saa arvoksi "false", koska käyttäjä
+  // ei ole kirjautunut vielä sisään sovellukseen => "currentUser" on yhtä kuin => "null".
+  // Me myös tiedämme, että kun käyttäjä kirjautuu ulos niin sovellus suorittaa funktion
+  // "handleUserLogout(...)", jonka kautta se palauttaa "currentUser" muuttujan tilan
+  // alkuperäiseen arvoon eli => "null", täten me varmistamme sen että aina kun queryä
+  // suoritetaan niin se palauttaa datan mitä me "oikeasti tarvitsemme" sillä hetkellä.
+  const checkCurrentUser = useQuery(GET_CURRENT_USER_DATA, {
+    variables: {
+      includeReviews: currentUser !== null ? true : false
+    }
+  });
 
   // Komponentti suorittaa kyseisen "useEffect(...)" funktion aina, kun
   // tapahtuu muutoksia "checkCurrentUser.data" muuttujan osalta.
@@ -77,6 +95,12 @@ const CheckUserStatus = () => {
     // käyttäjälle näkyviin. Tämän avulla voidaan siis varmistaa, että sen
     // hetkisen kirjautuneen käyttäjän data ei jää välimuistiin "roikkumaan".
     client.resetStore();
+    // Lisätty "Exercise 10.26: the user's reviews view" tehtävää varten alla oleva funktio,
+    // koska jostain syystä kun käyttäjä kirjautuu ulos sovelluksesta, niin se jää "jumiin"
+    // "My reviews" komponentille vaikka sen komponentin linkkiä ei ole enään saatavilla.
+    // Linkin eli "Logout" tekstin pitäisi ohjata käyttäjä takaisin etusivulle, mutta käyttäjää
+    // ei ohjata, niin olin lisännyt alla olevan funktion, joka varmistaa että se siirtyy etusivulle. 
+    history.push('/');
   };
 
   // Jos "currentUser" muuttuja on muuta kuin arvoa "null", niin komponentti renderöi
@@ -84,6 +108,11 @@ const CheckUserStatus = () => {
   if (currentUser !== null) {
     return (
       <View style={{flexDirection: 'row'}}>
+        <Pressable>
+          <Link to="/MyReviews">
+            <Text style={styles.containerTitle}>My reviews</Text>
+          </Link>
+        </Pressable>
         <Pressable>
           <Link to="/CreateReview">
             <Text style={styles.containerTitle}>Create a review</Text>

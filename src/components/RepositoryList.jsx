@@ -11,7 +11,7 @@ import useRepositories from '../hooks/useRepositories'; // Alustetaan "useReposi
 
 // Alustetaan "styles" niminen muuttuja, joka suorittaa kyseisen funktion eli
 // kun data renderöidään takaisin käyttäjälle, niin jokaisen arvon väliin
-// tulee 20px tyhjää tilaa.
+// tulee 10px tyhjää tilaa.
 const styles = StyleSheet.create({
   separator: {
     height: 10,
