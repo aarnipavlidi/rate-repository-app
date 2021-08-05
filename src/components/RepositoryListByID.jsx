@@ -3,6 +3,7 @@
 
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
 import { FlatList, View, StyleSheet } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
+import { useParams } from 'react-router-native'; // Otetaan kyseiset komponentit käyttöön "react-router-native" kirjaston kautta sovelluksen käytettäväksi.
 
 import useRepositoriesReviews from '../hooks/useRepositoriesReviews'; // Alustetaan "useRepositoriesReviews" niminen muuttuja, joka hyödyntää "useRepositories.js" tiedoston sisältöä.
 import useRepositoriesByID from '../hooks/useRepositoriesByID'; // Alustetaan "useRepositoriesByID" niminen muuttuja, joka hyödyntää "useRepositoriesByID.js" tiedoston sisältöä.
@@ -28,6 +29,8 @@ const styles = StyleSheet.create({
 // komponentti renderöi "loading spinner":in, jos data ei ole valmis näytettäväksi käyttäjälle.
 const RepositoryListByID = () => {
 
+  const { id } = useParams(); // Alustetaan muuttuja "id", jonka avulla suoritetaan "useParams(...)" funktio.
+
   // Komponetti ottaa käyttöön "useRepositoriesByID(...)" hookin, ja hyödynnetään
   // "repositoriesByID" ja "loading" muuttujia. Hookki suorittaa queryn eli
   // "GET_CURRENT_REPOSITORY", jonka data sijoitetaan "repositoriesByID" muuttujaan
@@ -39,7 +42,26 @@ const RepositoryListByID = () => {
   // "reviews" muuttujaa. Hookki suorittaa queryn eli "GET_CURRENT_REPOSITORY_REVIEWS",
   // jonka data sijoitetaan "reviews" muuttujaan, jonka avulla voidaan näyttää jokainen
   // arvostelu sen hetkisen "repository":n arvon kanssa.
-  const { reviews } = useRepositoriesReviews();
+  //
+  // Tehtävää "Exercise 10.25: infinite scrolling for the repository's reviews list"
+  // varten muokattu alla olevaa koodia niin, että kun sovellus suorittaa kyseisen
+  // hookin, niin sovellus palauttaa käyttäjälle takaisin yhdeksän (9) ensimmäistä
+  // arvoa palvelimen kautta. Kun käyttäjä on päässyt "viimeisen" arvon kohdalle,
+  // niin haetaan seuraavat arvot (jos niitä löytyy) palvelimesta takaisin näkyviin.
+  const { reviews, fetchMore } = useRepositoriesReviews({
+    first: 9,
+    repositoryID: id
+  });
+
+  // Alustetaan "onEndReach" muuttuja, joka suorittaa {...} sisällä olevat asiat
+  // aina, kun kyseiseen funktioon tehdään viittaus. Funktion toiminta perustuu
+  // siihen, että aina kun "FlatList" komponentin renderöidä data näyttää "viimeisen"
+  // arvon, kun käyttäjä selaa eri arvoja käytön aikana, niin komponentti hakee
+  // lisää dataa takaisin näytettäväksi => "fetchMore(...)" funktion avulla.
+  const onEndReach = () => {
+    console.log('Fetching more current repository reviews from server!');
+    fetchMore();
+  };
 
   // Alustetaan "repositoriesNodes" muuttuja, joka saa arvoksi joko tyhjän taulukon
   // arvon tai "repositoriesByID". Jos muuttujasta "repositoriesByID" ei löydy dataa
@@ -66,7 +88,9 @@ const RepositoryListByID = () => {
   return (
     <FlatList
       data={reviewsNodes}
-      keyExtractor={({ id}) => id}
+      onEndReached={() => onEndReach()}
+      onEndReachedThreshold={0.5}
+      keyExtractor={({ id }) => id}
       renderItem={({ item }) => <ReposityListReviews review={item} />}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       ListHeaderComponent={() => <RepositoryListHeader repository={repositoriesNodes} loadingStatus={loading} />}

@@ -4,6 +4,7 @@
 import { ApolloClient, InMemoryCache, createHttpLink } from '@apollo/client';
 import Constants from 'expo-constants'; // Otetaan käyttöön "Constants" komponentti => "expo-constants" kirjaston kautta sovelluksen käytettäväksi.
 import { setContext } from '@apollo/client/link/context'; // Alustetaan "setContext" funktio, joka hyödyntää kyseisen kirjaston sisältöä sovelluksen aikana.
+import { relayStylePagination } from '@apollo/client/utilities'; // Alustetaan "relayStylePagination" funktio, joka hyödyntää kyseisen kirjaston sisältöä sovelluksen aikana.
 
 const httpLink = createHttpLink({
   // Tehtävää varten "Exercise 10.12: environment variables" varten lisätty tiedostoon
@@ -11,6 +12,27 @@ const httpLink = createHttpLink({
   // joka on yhtä kuin => "process.env.APOLLO_URI". Ja kyseiseen arvoon pääsemme
   // käsiksi käyttämällä "Constants" funktiota ja => "manifest.extra.server".
   uri: Constants.manifest.extra.server,
+});
+
+// Alustetaan "cache" muuttuja, joka suorittaa {...} sisällä olevat asiat aina,
+// kun kyseiseen funktioon tehdään viittaus. Funktion "relayStylePagination(...)"
+// avulla voidaan hakea lisää dataa sen viittaavan objektin osalta palvelimsta,
+// kun käyttäjä on päässyt viimeiseen arvoon minkä sovellus näyttää ensimmäisenä
+// takaisin. Tämän avulla palvelimen ei tarvitse näyttää kaikkia arvoja välttämättä
+// takaisin vaan ainostaan, sitä mitä käyttäjä näkee sillä hetkellä omassa näytössä.
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        repositories: relayStylePagination(),
+      },
+    },
+    Repository: {
+      fields: {
+        reviews: relayStylePagination(),
+      },
+    },
+  },
 });
 
 // Alustetaan "createApolloClient" muuttuja, joka suorittaa {...} sisällä olevat asiat aina,
@@ -34,7 +56,7 @@ const createApolloClient = (authStorage) => {
   });
   return new ApolloClient({
     link: authLink.concat(httpLink),
-    cache: new InMemoryCache(),
+    cache,
   });
 };
 

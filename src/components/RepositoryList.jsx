@@ -53,7 +53,33 @@ const RepositoryList = () => {
   // "debouncedFilterInput" arvo, hookin parametrin arvoksi. Kun käyttäjä saapuu sovellukseen
   // ensimmäistä kertaa, niin query suoritetaan ensin arvolla => '', ja siitä ei tule
   // erroria, koska query odottaa "String" tyyppiä ja kyseessä on "String" tyyppi! :)
-  const { repositories } = useRepositories(orderByState, orderDirectionState, debouncedFilterInput);
+  //
+  // Muokattu ennen "Exercise 10.25: infinite scrolling for the repository's reviews list"
+  // tehtävää (materiaalin mukaisesti) alla olevaa hookkia niin, että kun käyttäjä
+  // saapuu sovellukseen (etusivulle), niin suoritetaan query niin että näytetään
+  // ensin viisi (5) ensimmäistä arvoa takaisin. Kun käyttäjä on päässyt "viimeisen"
+  // arvon sijaintiin niin "FlatList" komponentti renderöi lisää dataa palvelimesta
+  // "onEndReach" funktion kautta, joka on yhdistetty "onEndReach" propsin arvoon.
+  // Sekä kaikki ({...}) sisällä olevat objektit siirtyvät "variables" muuttujan
+  // parametrin arvoon (hookin tiedostossa), jonka kautta aina kun kyseinen hookki
+  // hyödyntää kyseistä parametrin arvoa, niin se viittaa aina näihin neljään (4)
+  // eri objektin arvoon.
+  const { repositories, fetchMore } = useRepositories({
+    first: 5,
+    orderBySetting: orderByState,
+    orderDirectionSetting: orderDirectionState,
+    filterInputValue: debouncedFilterInput
+  });
+
+  // Alustetaan "onEndReach" muuttuja, joka suorittaa {...} sisällä olevat asiat
+  // aina, kun kyseiseen funktioon tehdään viittaus. Funktion toiminta perustuu
+  // siihen, että aina kun "FlatList" komponentin renderöidä data näyttää "viimeisen"
+  // arvon, kun käyttäjä selaa eri arvoja käytön aikana, niin komponentti hakee
+  // lisää dataa takaisin näytettäväksi => "fetchMore(...)" funktion avulla.
+  const onEndReach = () => {
+    console.log('Fetching more repositories from server!');
+    fetchMore();
+  };
 
   // Alustetaan "repositoryNodes" muuttuja, joka on yhtä kuin "repositories" muuttuja,
   // jos muuttuja on "tyhjä" eli ei ole dataa, niin palautetaan takaisin "[]" eli
@@ -72,6 +98,8 @@ const RepositoryList = () => {
   return (
     <FlatList
       data={repositoryNodes}
+      onEndReached={() => onEndReach()}
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       keyExtractor={(item, index) => item.fullName}
       renderItem={({ item }) => <RepositoryItem item={item} />}

@@ -1,9 +1,7 @@
 // This exercise has been commented by Aarni Pavlidi, if you have any questions or suggestions with the code,
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
-import { useState, useEffect } from 'react'; // Sovellus ottaa kyseiset funktiot "react" kirjaston kautta.
 import { useQuery } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
-import { useParams } from 'react-router-native'; // Otetaan kyseiset komponentit käyttöön "react-router-native" kirjaston kautta sovelluksen käytettäväksi.
 import { GET_CURRENT_REPOSITORY_REVIEWS } from '../graphql/queries'; // Otetaan kyseiset queryt sovelluksen käytettäväksi "queries.js" tiedoston kautta.
 
 // Alustetaan "useRepositoriesReviews" hookki, joka suorittaa {...} sisällä olevat asiat
@@ -12,11 +10,7 @@ import { GET_CURRENT_REPOSITORY_REVIEWS } from '../graphql/queries'; // Otetaan 
 // kaikki arvostelut, jotka viittaavat kyseiseen "repository":n arvoon. Sen hetkinen
 // arvo me saadaan "useParams(...)" funktion avulla, jonka muuttuja eli "id" sijoitetaan
 // queryn "repositoryID" objektin alle.
-const useRepositoriesReviews = () => {
-
-  const { id } = useParams(); // Alustetaan muuttuja "id", jonka avulla suoritetaan "useParams(...)" funktio.
-
-  const [reviews, setReviews] = useState(); // Alustetaan "reviews" muuttuja tilaan.
+const useRepositoriesReviews = (variables) => {
 
   // Alustetaan "GET_CURRENT_REPOSITORY_REVIEWS" query, ja otetaan käyttöön {...}
   // sisällä olevat muuttujien arvot. Kun query on suoritettu, niin dataan
@@ -24,35 +18,46 @@ const useRepositoriesReviews = () => {
   // palvelimesta eli ei voida näyttää dataa vielä takaisin käyttäjälle,
   // niin "loading" muuttuja on arvoa "true", jota voidaan hyödyntää esim.
   // renderöimällä "spinner" yms. takaisin käyttäjälle näkyviin.
-  const { data, error, loading } = useQuery(GET_CURRENT_REPOSITORY_REVIEWS, {
+  const { data, loading, fetchMore, ...result } = useQuery(GET_CURRENT_REPOSITORY_REVIEWS, {
+    variables,
     fetchPolicy: 'cache-and-network',
-    variables: { repositoryID: id }
   });
 
-  // Alustetaan "fetchRepositoriesReviews" funktio, joka suorittaa {...} sisällä
-  // olevat asiat aina, kun kyseiseen funktioon tehdään viittaus. Jos "data"
-  // muuttujasta löytyy dataa, niin muutetaan "reviews" muuttujan
-  // tilaa sijoittamalla "data.repository" muuttujan data.
-  const fetchRepositoriesReviews = async () => {
-    if (data) {
-      setReviews(data.repository)
-    };
+  // Alustetaan "handleFetchMore" muuttuja, joka suorittaa {...} sisällä olevat asiat aina,
+  // kun kyseiseen funktioon tehdään viittaus. Funktion avulla siis tarkistetaan ensin,
+  // muuttujan "canFetchMore" avulla, että kun käyttäjä on päässyt "viimeiseen" renderöityyn
+  // arvoon näytöllä, niin että löytyykö lisää vielä "samaa dataa" => "pageInfo.hasNextPage"
+  // muuttujan arvolla. Muuttuja on joko muotoa "false" tai "true". Jos muuttuja on arvoa
+  // "false", niin funktio ei tee mitään (return;) ja muussa tapauksessa suoritetaan funktio
+  // "fetchMore(...)", jolle annetaan "variables" objektin arvo, johon sijoitetaan hookin
+  // kautta tuleva "variables" parametrin arvo sekä "after" objektin arvo, joka saa arvoksi
+  // "pageInfo.endCursor" muuttujan arvon eli viimeisin arvo mikä on "viimeksi" renderöity
+  // takaisin käyttäjälle näkyviin. Tämän avulla sovellus pystyy hakemaan palvelimesta
+  // seuraavan arvon mitä näytetään takaisin käyttäjälle, eikä tule "samoja arvoja" takaisin.
+  const handleFetchMore = () => {
+    const canFetchMore = !loading && data?.repository.reviews.pageInfo.hasNextPage;
+
+    // Jos muuttuja "canFetchMore" on => "false", niin suoritetaan {...} sisällä oleva asia.
+    if (!canFetchMore) {
+      return;
+    }
+
+    // Muussa tapauksessa suoritetaan alla oleva funktio.
+    fetchMore({
+      variables: {
+        after: data.repository.reviews.pageInfo.endCursor,
+        ...variables,
+      },
+    });
   };
 
-  // Alustetaan "useEffect(...)" funktio, joka suorittaa {...} sisällä olevat
-  // asiat aina, kun kyseiseen funktioon tehdään viittaus. Jos "data" muuttujasta
-  // löytyy dataa, niin suoritetaan "fetchRepositoriesReviews(...)" funktio.
-  // Kyseinen "useEffect(...)" funktio suoritetaan aina, kun tapahtuu muutoksia
-  // "data" muuttujan osalta.
-  useEffect(() => {
-    if (data) {
-      fetchRepositoriesReviews();
-    }
-  }, [data]);
-
-  // Hookki palauttaa takaisin {...} sisällä olevat muuttujat komponenttien käytettäväksi,
-  // eli voimme tehdä esim. => "{ reviews, loading } = useRepositoriesReviews();"
-  return { reviews, loading, refetch: fetchRepositoriesReviews };
+  // "useRepositories" hookki palauttaa takaisin {...} sisällä olevat muuttujat muiden komponenttien käytettäväksi.
+  return {
+    reviews: data?.repository,
+    fetchMore: handleFetchMore,
+    loading,
+    ...result,
+  };
 };
 
 // Viedään (export) alla oleva hookki (useRepositoriesReviews) sovelluksen käytettäväksi, jotta esim. "App.js" tiedosto pystyy suorittamaan kyseiset funktiot.

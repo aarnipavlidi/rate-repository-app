@@ -20,9 +20,13 @@ import { gql } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funk
 // "searchKeyword" alle, jonka kautta queryn suorittamisen yhteydessä palautetaan ne arvot mitkä täsmäävät
 // käyttäjän antaman hakukentän arvon kanssa. Oletuksena objektin arvo saa => '' eli se palauttaa kaikki
 // "repository":n arvot takaisin käyttäjälle näkyviin sovelluksen etusivulle.
+//
+// Lisätty ""Exercise 10.25: infinite scrolling for the repository's reviews list" tehtävää
+// varten "first" ja "after" argumenttien käyttäminen queryn osalta. Näiden toiminnallisuus
+// selitetty tarkemmin "GET_CURRENT_REPOSITORY_REVIEWS" queryn osalta.
 export const GET_ALL_REPOSITORIES = gql`
-  query showAllRepositories($orderBySetting: AllRepositoriesOrderBy, $orderDirectionSetting: OrderDirection, $filterInputValue: String) {
-    repositories(orderBy: $orderBySetting, orderDirection: $orderDirectionSetting, searchKeyword: $filterInputValue) {
+  query showAllRepositories($first: Int, $after: String, $orderBySetting: AllRepositoriesOrderBy, $orderDirectionSetting: OrderDirection, $filterInputValue: String) {
+    repositories(first: $first, after: $after, orderBy: $orderBySetting, orderDirection: $orderDirectionSetting, searchKeyword: $filterInputValue) {
       edges {
         node {
           id
@@ -35,6 +39,12 @@ export const GET_ALL_REPOSITORIES = gql`
           ratingAverage
           ownerAvatarUrl
         }
+        cursor
+      }
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
       }
     }
   }
@@ -68,23 +78,48 @@ export const GET_CURRENT_REPOSITORY = gql`
 // Jos sen hetkisellä arvolla ei ole annettu toistaiseksi mitään arvostelua,
 // niin sovellus renderöi takaisin tyhjän taulukon. Tämän ominaisuus on
 // toteutettu "RepositoryListByID" komponentissa.
+//
+// Muutettu "Exercise 10.25: infinite scrolling for the repository's reviews list"
+// tehtävää varten alla olevaa queryä niin, että sille lisätty "first" ja "after"
+// argumenttien käytön mahdollisuus. Objektin arvo "first" avulla voidaan määrittää,
+// että kuinka monta arvoa halutaan näyttää takaisin käyttäjälle (palvelimen kautta
+// tulevasta datasta) ja, kun sovellus haluaa näyttää lisää arvoja eli käyttäjä on
+// päässyt viimeisen arvon kohdalle, niin objektin "after" avulla voidaan näyttää
+// seuravaat arvot palvelimesta, jos niitä löytyy palvelimesta. Käytännössä tämä
+// tarkoittaa sitä, että jos me halutaan esim. renderöidä kaksi (2) ensimmäistä
+// arvoa niin => "pageInfo.startCursor" kertoo meille, että mikä on ensimmäisen
+// arvon "cursor" objektin arvo ja "pageInfo.endCursor" kertoo meille että mikä
+// on toisen "cursor" objektin arvo. (jokaiselta arvolta löytyy siis "cursor"
+// objektin arvo). Tästä me voidaan päätellä, että jos palvelimesta vielä löytyy
+// lisää näiden kahden (2) arvon jälkeen, niin "hasNextPage" on arvoa => "true",
+// jonka jälkeen me sijoitetaan "after" objektin arvoon => "pageInfo.endCursor",
+// tästä sovellus tietää, että mitä arvoa käyttäjälle on näytetty viimeisenä, jonka
+// kautta varmistetaan että ei renderöidä "samanlaisia arvoja" takaisin.
 export const GET_CURRENT_REPOSITORY_REVIEWS = gql`
-  query showCurrentRepositoryReviews($repositoryID: ID!) {
+  query showCurrentRepositoryReviews($repositoryID: ID!, $first: Int, $after: String) {
     repository(id: $repositoryID) {
       id
       fullName
-      reviews {
+      reviews(first: $first, after: $after) {
+        totalCount
         edges {
           node {
             id
             text
             rating
             createdAt
+            repositoryId
             user {
               id
               username
             }
           }
+          cursor
+        }
+        pageInfo {
+          endCursor
+          startCursor
+          hasNextPage
         }
       }
     }
