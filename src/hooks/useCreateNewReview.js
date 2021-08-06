@@ -1,8 +1,9 @@
 // This exercise has been commented by Aarni Pavlidi, if you have any questions or suggestions with the code,
 // then please contact me by sending email at me@aarnipavlidi.fi <3
 
-import { useMutation } from '@apollo/client'; // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
+import { useQuery, useMutation } from '@apollo/client'; // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
 import { CREATE_NEW_REVIEW } from '../graphql/mutations'; // Otetaan kyseiset mutaatiot sovelluksen käytettäväksi "mutations.js" tiedoston kautta.
+import { GET_CURRENT_USER_DATA } from '../graphql/queries'; // Otetaan kyseiset mutaatiot sovelluksen käytettäväksi "mutations.js" tiedoston kautta.
 
 // Alustetaan "useCreateNewReview" niminen hookki, joka suorittaa {...} sisällä olevat
 // asiat aina, kun kyseiseen hookkiin tehdään viittaus. Hookin on tarkoitus toimia niin,
@@ -17,7 +18,20 @@ const useCreateNewReview = () => {
   // "result" muuttujat. Muuttujan "createNewReview" avulla voidaan
   // suorittaa mutaatio, ja jos mutaatio onnistuu (eli tallennetaan tiedot
   // palvelimelle), niin me pääsemme käsiksi dataan "result" muuttujan avulla.
-  const [createNewReview, result] = useMutation(CREATE_NEW_REVIEW);
+  //
+  // Muutettu tehtävää "Exercise 10.27: review actions" tehtävää varten alla olevaa
+  // mutaatiota "CREATE_NEW_REVIEW", niin että aina kun käyttäjä on lisännyt uuden
+  // arvostelun arvon palvelimeen, niin suoritetaan samassa yhteydessä query =>
+  // "GET_CURRENT_USER_DATA", jonka kautta sovellus näyttää uusimman datan
+  // kaikista arvosteluista minkä sen hetkinen kirjautunut käyttäjä on tehnyt.
+  const [createNewReview, result] = useMutation(CREATE_NEW_REVIEW, {
+    refetchQueries: [{
+      variables: {
+        includeReviews: true,
+      },
+      query: GET_CURRENT_USER_DATA
+    }],
+  });
 
   // Alustetaan "createReview" muuttuja, joka suorittaa {...} sisällä olevat
   // asiat, aina kun kyseiseen funktioon tehdään viittaus. Kun käyttäjä

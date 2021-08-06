@@ -60,3 +60,13 @@ export const CREATE_NEW_REVIEW = gql`
     }
   }
 `
+
+// Alustetaan "DELETE_CURRENT_REVIEW" niminen mutaatio, joka suorittaa alla olevan mutaation
+// eli aina, kun käyttäjä haluaa poistaa tietyn arvostelun arvon palvelimesta, niin käyttäjän
+// valitseman arvostelun "id":n arvo sijoitetaan argumentinksi => "selectedReviewID" objektin
+// alla ja suoritetaan mutaatio loppuun. 
+export const DELETE_CURRENT_REVIEW = gql`
+  mutation deleteCurrentReview($selectedReviewID: ID!) {
+    deleteReview(id: $selectedReviewID)
+  }
+`

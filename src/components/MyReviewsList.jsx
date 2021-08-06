@@ -4,10 +4,7 @@
 import React from 'react'; // Otetaan käyttöön "react" niminen kirjasto sovelluksen käytettäväksi.
 import { StyleSheet, FlatList, View } from 'react-native'; // Otetaan käyttöön kyseiset komponentit "react-native" kirjaston kautta sovelluksen käytettäväksi.
 
-// https://www.apollographql.com/docs/react/api/react/hooks/#useapolloclient
-import { useApolloClient } from '@apollo/client'; // Otetaan käyttöön "useApolloClient" funktio kyseisen kirjaston kautta sovelluksen ajaksi.
-import { readQuery } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
-import { GET_CURRENT_USER_DATA } from '../graphql/queries'; // Otetaan kyseiset queryt sovelluksen käytettäväksi "queries.js" tiedoston kautta.
+import useCurrentUser from '../hooks/useCurrentUser'; // Alustetaan "useCurrentUser" funktio, joka hyödyntää "useCurrentUser.js" tiedoston sisältöä sovelluksen aikana.
 
 import MyReviewsItem from './MyReviewsItem'; // Tuodaan "MyReviewsItem" (MyReviewsItem.jsx) niminen komponentti sovelluksen käytettäväksi.
 
@@ -29,28 +26,20 @@ const styles = StyleSheet.create({
 // takaisin vain tyhjän taulukon eli ei renderöi mitään.
 const MyReviewsList = () => {
 
-  // Alla olevan muuttujan avulla pääsemme käsiksi välimuistissa olevaan
-  // dataan ja vaikuttamaan siihen esim. poistamalla tiettyjä asioita yms.
-  const client = useApolloClient(); // Alustetaan "client" muuttuja, joka suorittaa kyseisen funktion.
-
-  // Alustetaan "readQuery(...)" funktio eli haetaan välimuistista queryn =>
-  // "GET_CURRENT_USER_DATA" sekä annetaan objektin "includeReviews" argumentiksi
-  // arvoa "true". Jos välimuistista löytyy kyseinen query, niin palautetaan
-  // takaisin data "authorizedUser" muuttujan alle, jonka kautta voidaan
-  // näyttää sen hetkisen käyttäjän antamat eri arvostelut takaisin näkyviin.
-  const { authorizedUser } = client.readQuery({
-    query: GET_CURRENT_USER_DATA,
-    variables: {
-      includeReviews: true,
-    },
-  });
+  // Otetaan käyttöön "useCurrentUser(...)" hookki, jonka kautta päästään käsiksi "currentUserReviews"
+  // muuttujan arvoon eli, jos käyttäjä kirjautuu sisään sovellukseen, niin tämän komponentin osalta
+  // me pääsemme käsiksi sen hetkisen kirjautuneen "reviews" objektin dataan eli näytetään takaisin
+  // kaikki käyttäjän tekemät arvostelujen arvot. Jos käyttäjä poistaa tai lisää uuden arvostelun
+  // arvon, niin hookin kautta "currentUserReviews" muuttujan tilaa muutetaan, jonka kautta komponentti
+  // näyttää aina "uusimman" datan takaisin käyttäjälle näkyviin. 
+  const { currentUserReviews } = useCurrentUser();
 
   // Alustetaan "userReviewsNodes" muuttuja, joka suorittaa alla olevan konditionaalin
-  // eli, jos "authorizedUser" muuttujasta löytyy dataa (query => "GET_CURRENT_USER_DATA")
+  // eli, jos "currentUserReviews" muuttujasta löytyy dataa (query => "GET_CURRENT_USER_DATA")
   // niin me haetaan jokainen arvo "reviews.edges" objektin sisältä ja muussa tapauksessa
   // jos dataa ei löydy, niin me palautetaan takaisin tyhjä taulukko muuttujan käytettäväksi.
-  const userReviewsNodes = authorizedUser
-    ? authorizedUser.reviews.edges.map(results => results.node)
+  const userReviewsNodes = currentUserReviews
+    ? currentUserReviews.reviews.edges.map(results => results.node)
     : [];
 
   // Kompoentti renderöi (...) sisällä olevat asiat takaisin käyttäjälle näkyviin. Komponentti

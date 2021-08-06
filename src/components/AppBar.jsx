@@ -10,9 +10,8 @@ import { Platform, Text, StyleSheet, ScrollView, View, Pressable } from 'react-n
 
 // https://www.apollographql.com/docs/react/api/react/hooks/#useapolloclient
 import { useApolloClient } from '@apollo/client'; // Otetaan käyttöön "useApolloClient" funktio kyseisen kirjaston kautta sovelluksen ajaksi.
-import { useQuery } from '@apollo/client' // Sovellus ottaa käyttöön kyseiset funktiot "@apollo/client" kirjaston kautta.
-import { GET_CURRENT_USER_DATA } from '../graphql/queries'; // Otetaan kyseiset queryt sovelluksen käytettäväksi "queries.js" tiedoston kautta.
 import useAuthStorage from '../hooks/useAuthStorage'; // Alustetaan "useAuthStorage" funktio, joka hyödyntää "useAuthStorage.js" tiedoston sisältöä sovelluksen aikana.
+import useCurrentUser from '../hooks/useCurrentUser'; // Alustetaan "useCurrentUser" funktio, joka hyödyntää "useCurrentUser.js" tiedoston sisältöä sovelluksen aikana.
 
 import styling from '../styling'; // Alustetaan "styling" niminen muuttuja, jonka avulla sovellus ottaa erillisen tyylitiedoston (styling.js) käyttöönsä.
 
@@ -68,19 +67,26 @@ const CheckUserStatus = () => {
   // "handleUserLogout(...)", jonka kautta se palauttaa "currentUser" muuttujan tilan
   // alkuperäiseen arvoon eli => "null", täten me varmistamme sen että aina kun queryä
   // suoritetaan niin se palauttaa datan mitä me "oikeasti tarvitsemme" sillä hetkellä.
-  const checkCurrentUser = useQuery(GET_CURRENT_USER_DATA, {
-    variables: {
-      includeReviews: currentUser !== null ? true : false
-    }
-  });
+  //
+  // Muutettu "Exercise 10.27: review actions" tehtävää varten alla olevaa queryä niin,
+  // että siirretään "GET_CURRENT_USER_DATA" hookin taakse eli "useCurrentUser(...)".
+  // Kun käyttäjä kirjautuu sovellukseen sisään ensimmäistä kertaa, niin sovellus
+  // suorittaa queryn "currentUser" muuttujan avulla, jonka kautta query palauttaa
+  // takaisin sen hetkisen kirjautuneen käyttäjän luomat arvostelut. Kun käyttäjä
+  // kirjautuu ulos, niin sovellus palauttaa hookissa sijaitsevan "currentUserReviews"
+  // muuttujan tilan alkuperäiseen arvoon eli "null". Kyseistä muuttujaa käytetään
+  // "MyReviewsList" komponentissa, joka näyttää "datan" käyttäjälle eli aina,
+  // kun query hakee palvelimesta queryn datan, niin se sijoittaa kyseisen datan
+  // "currentUserReviews" muuttujan alle.
+  const { data, setCurrentUserReviews } = useCurrentUser(currentUser);
 
   // Komponentti suorittaa kyseisen "useEffect(...)" funktion aina, kun
   // tapahtuu muutoksia "checkCurrentUser.data" muuttujan osalta.
   useEffect(() => {
-    if (checkCurrentUser.data) {
-      setCurrentUser(checkCurrentUser.data.authorizedUser); // Muutetaan "currentUser" muuttujan arvo => "checkCurrentUser.data.authorizedUser" arvoon.
+    if (data) {
+      setCurrentUser(data.authorizedUser); // Muutetaan "currentUser" muuttujan arvo => "checkCurrentUser.data.authorizedUser" arvoon.
     }
-  }, [checkCurrentUser.data]);
+  }, [data]);
 
   // Alustetaan "handleUserLogout" muuttuja, joka suorittaa {...} sisällä olevat asiat
   // aina, kun kyseiseen funktioon tehdään viittaus. Funktion avulla varmistetaan, että
@@ -88,6 +94,7 @@ const CheckUserStatus = () => {
   // välimuistista (cache) että local storagesta kirjautuneen käyttäjän data pois.
   const handleUserLogout = async () => {
     await authStorage.removeAccessToken(); // Suoritetaan "authStorage.js" tiedostossa oleva => "removeAccessToken(...)" funktio.
+    setCurrentUserReviews(null); // Muutetaan "currentUserReviews" muuttujan tilaa alkuperäiseen arvoon eli "null".
     setCurrentUser(null); // Muutetaan "currentUser" muuttujan tilaa alkuperäiseen arvoon eli "null".
     // Alla oleva funktio siis poistaa kaiken datan välimuistista (cache)
     // ja suorittaa uudestaan kaikki "aktiiviset" queryt eli tässä tapauksessa
@@ -99,7 +106,7 @@ const CheckUserStatus = () => {
     // koska jostain syystä kun käyttäjä kirjautuu ulos sovelluksesta, niin se jää "jumiin"
     // "My reviews" komponentille vaikka sen komponentin linkkiä ei ole enään saatavilla.
     // Linkin eli "Logout" tekstin pitäisi ohjata käyttäjä takaisin etusivulle, mutta käyttäjää
-    // ei ohjata, niin olin lisännyt alla olevan funktion, joka varmistaa että se siirtyy etusivulle. 
+    // ei ohjata, niin olin lisännyt alla olevan funktion, joka varmistaa että se siirtyy etusivulle.
     history.push('/');
   };
 
